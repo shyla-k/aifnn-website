@@ -1,0 +1,192 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #06152f;
+  color: #a3acc4;
+}
+
+/* Header */
+header {
+  background-color: #0d305b;
+  padding: 1rem 2rem;
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav .logo {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  color: #5cb6ff;
+  font-size: 1.5rem;
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+nav ul li a {
+  color: #a3acc4;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+nav ul li a:hover {
+  color: #5cb6ff;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(to right, #0d305b, #153763);
+  text-align: center;
+  padding: 6rem 2rem;
+}
+.hero h1 {
+  font-size: 3rem;
+  color: #fff;
+}
+.hero p {
+  font-size: 1.2rem;
+  color: #dbe9ff;
+  margin: 1rem 0;
+}
+.cta-btn {
+  background-color: #5cb6ff;
+  color: #06152f;
+  padding: 0.8rem 2rem;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+.cta-btn:hover {
+  background-color: #4a9cdb;
+}
+
+/* Features Section */
+.features {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.features h2 {
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 2rem;
+}
+.feature-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+.feature-card {
+  background-color: #0d305b;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 300px;
+  text-align: left;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+.feature-card img {
+  width: 40px;
+  margin-bottom: 1rem;
+}
+.feature-card h3 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.feature-card p {
+  color: #a3acc4;
+}
+
+/* Pricing Section */
+.pricing {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.pricing h2 {
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 2rem;
+}
+.pricing-table {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+.pricing-card {
+  background-color: #0d305b;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 280px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+.pricing-card h3 {
+  color: #fff;
+}
+.pricing-card p {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+  color: #5cb6ff;
+}
+.pricing-card ul {
+  list-style: none;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+.pricing-card ul li {
+  margin: 0.5rem 0;
+  color: #dbe9ff;
+}
+
+/* Contact Section */
+.contact {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.contact h2 {
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 2rem;
+}
+form {
+  max-width: 500px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+input, textarea {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #153763;
+  color: #fff;
+}
+input::placeholder, textarea::placeholder {
+  color: #a3acc4;
+}
+button {
+  background-color: #5cb6ff;
+  color: #06152f;
+  padding: 0.75rem;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+/* Footer */
+footer {
+  background-color: #0d305b;
+  text-align: center;
+  padding: 1rem;
+  color: #a3acc4;
+  font-size: 0.9rem;
+}
