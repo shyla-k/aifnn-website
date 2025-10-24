@@ -56,7 +56,7 @@ Error generating stack: `+u.message+`
       hover:shadow-[0_0_20px_rgba(30,64,175,0.9)]
       hover:scale-105
       active:scale-95
-    `};return E.jsx("button",{onClick:i,className:`${l} ${c[o]}`,children:n})}const u2="/assets/AifNN_darkbluebackground1-NnCnDKiv.png",Dh="/assets/iLearnjustlogo-CJqY-3eH.png",c2="/assets/background2-BccTqalx.png";/**
+    `};return E.jsx("button",{onClick:i,className:`${l} ${c[o]}`,children:n})}const u2="/aifnn-website/assets/AifNN_darkbluebackground1-NnCnDKiv.png",Dh="/aifnn-website/assets/iLearnjustlogo-CJqY-3eH.png",c2="/aifnn-website/assets/background2-BccTqalx.png";/**
  * @license lucide-react v0.546.0 - ISC
  *
  * This source code is licensed under the ISC license.
