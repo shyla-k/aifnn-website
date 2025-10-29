@@ -23,6 +23,87 @@ import Button from "./components/Button";
 // Modern dark theme inspired AI company landing page
 // Uses TailwindCSS + framer-motion
 
+function FormspreeContactForm() {
+  const [status, setStatus] = React.useState("idle");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("submitting");
+
+    const form = e.target;
+    const data = new FormData(form);
+
+    const response = await fetch("https://formspree.io/f/mwopkak", {
+ // 👈 Replace this
+      method: "POST",
+      body: data,
+      headers: { Accept: "application/json" },
+    });
+
+    if (response.ok) {
+      form.reset();
+      setStatus("success");
+    } else {
+      setStatus("error");
+    }
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="bg-gray-900 p-6 rounded-xl shadow transition-all"
+    >
+      {status === "success" ? (
+        <p className="text-green-400 font-medium">
+          ✅ Thank you! Your message has been sent.
+        </p>
+      ) : (
+        <>
+          <label className="block text-sm text-gray-300">Name</label>
+          <input
+            className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
+            name="name"
+            required
+          />
+
+          <label className="block text-sm mt-4 text-gray-300">Email</label>
+          <input
+            className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
+            type="email"
+            name="email"
+            required
+          />
+
+          <label className="block text-sm mt-4 text-gray-300">Message</label>
+          <textarea
+            className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
+            rows={4}
+            name="message"
+            required
+          />
+
+          <button
+            type="submit"
+            disabled={status === "submitting"}
+            className={`mt-6 w-full px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium ${
+              status === "submitting" ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            {status === "submitting" ? "Sending..." : "Send Message"}
+          </button>
+
+          {status === "error" && (
+            <p className="text-red-400 mt-3 text-sm">
+              ❌ Something went wrong. Please try again later.
+            </p>
+          )}
+        </>
+      )}
+    </form>
+  );
+}
+
+
 export default function AICompanyWebsite() {
  const [menuOpen, setMenuOpen] = useState(false);
 const [showModal, setShowModal] = useState(false);
@@ -461,28 +542,83 @@ const [showModal, setShowModal] = useState(false);
       </section> */}
 
       {/* CONTACT */}
-      <section id="contact" className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-          <div>
-            <h3 className="text-2xl font-bold">Get in Touch</h3>
-            <p className="mt-4 text-gray-300">Let us know about your project. We’ll respond within 1-2 business days.</p>
-            <div className="mt-6 space-y-3 text-sm text-gray-400">
-              <div>📞 +91 86605 06059</div>
-              <div>📧 <a href="mailto:shyla.mk@aifnn.com" className="underline text-blue-400">shyla.mk@aifnn.com</a></div>
-              <div>🌐 www.aifnn.com</div>
-            </div>
-          </div>
-          <form className="bg-gray-900 p-6 rounded-xl shadow" onSubmit={(e) => { e.preventDefault(); alert('Form submitted (demo)'); }}>
-            <label className="block text-sm text-gray-300">Name</label>
-            <input className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white" required />
-            <label className="block text-sm mt-4 text-gray-300">Email</label>
-            <input className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white" type="email" required />
-            <label className="block text-sm mt-4 text-gray-300">Message</label>
-            <textarea className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white" rows={4} required />
-            <button type="submit" className="mt-6 w-full px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium">Send Message</button>
-          </form>
+<section id="contact" className="max-w-7xl mx-auto px-6 py-16">
+  <div className="grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <h3 className="text-2xl font-bold">Get in Touch</h3>
+      <p className="mt-4 text-gray-300">
+        Let us know about your project. We’ll respond within 1–2 business days.
+      </p>
+      <div className="mt-6 space-y-3 text-sm text-gray-400">
+        <div>📞 +91 86605 06059</div>
+        <div>
+          📧{" "}
+          <a
+            href="mailto:shyla.mk@aifnn.com"
+            className="underline text-blue-400"
+          >
+            shyla.mk@aifnn.com
+          </a>
         </div>
-      </section>
+        <div>🌐 www.aifnn.com</div>
+      </div>
+    </div>
+
+    {/* ✅ Formspree-integrated form */}
+    <form
+  onSubmit={async (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+
+    const response = await fetch("https://formspree.io/f/mwopkak", {
+      method: "POST",
+      body: data,
+      headers: { Accept: "application/json" },
+    });
+
+    if (response.ok) {
+      alert("✅ Message sent successfully!");
+      e.target.reset();
+    } else {
+      alert("❌ There was an issue sending your message.");
+    }
+  }}
+  className="bg-gray-900 p-6 rounded-xl shadow"
+>
+  <label className="block text-sm text-gray-300">Name</label>
+  <input
+    className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
+    name="name"
+    required
+  />
+
+  <label className="block text-sm mt-4 text-gray-300">Email</label>
+  <input
+    className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
+    name="email"
+    type="email"
+    required
+  />
+
+  <label className="block text-sm mt-4 text-gray-300">Message</label>
+  <textarea
+    className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
+    name="message"
+    rows={4}
+    required
+  />
+
+  <button
+    type="submit"
+    className="mt-6 w-full px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium"
+  >
+    Send Message
+  </button>
+</form>
+
+  </div>
+</section>
+
 
       {/* --- MODAL --- */}
       {showModal && (
