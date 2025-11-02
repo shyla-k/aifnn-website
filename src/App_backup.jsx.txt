@@ -1,0 +1,200 @@
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { motion } from "framer-motion";
+
+import Hero from "./components/Hero.jsx";
+import CaseStudies from "./components/CaseStudies.jsx";
+import Button from "./components/Button.jsx";
+import ContactForm from "./components/ContactForm.jsx";
+import ThankYou from "./pages/ThankYou.jsx";
+
+import Logo from "./assets/AifNN_darkbluebackground1.png";
+import iLearnLogo from "./assets/iLearnjustlogo.png";
+import background2 from "./assets/background2.png";
+
+import { Brain, Layers, Bot, Cpu } from "lucide-react";
+import {
+  FaHospital,
+  FaMoneyBillWave,
+  FaIndustry,
+  FaCar,
+  FaFighterJet,
+  FaSeedling,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
+
+export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <Router>
+      <Routes>
+        {/* ✅ Main Landing Page */}
+        <Route
+          path="/"
+          element={
+            <div className="relative min-h-screen text-white antialiased bg-black">
+              {/* FIXED BACKGROUND */}
+              <div
+                className="fixed inset-0 bg-cover bg-center bg-fixed -z-20"
+                style={{ backgroundImage: `url(${background2})` }}
+                aria-hidden="true"
+              />
+              <div className="fixed inset-0 bg-black/60 -z-10" aria-hidden="true" />
+
+              {/* NAVBAR */}
+              <nav className="fixed top-0 left-0 w-full bg-gray-900/70 backdrop-blur-md shadow z-50 border-b border-gray-800">
+                <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <img src={Logo} alt="AifNN Logo" className="h-10 w-auto" />
+                    <span className="text-sm font-medium text-gray-200 hidden sm:inline">
+                      AI • ML • Automation • Digitization • Engineering
+                    </span>
+                  </div>
+
+                  {/* Desktop Links */}
+                  <div className="hidden md:flex items-center gap-6">
+                    <a href="#hero" className="text-gray-200 hover:text-cyan-400">Home</a>
+                    <a href="#about" className="text-gray-200 hover:text-cyan-400">About</a>
+                    <a href="#services" className="text-gray-200 hover:text-cyan-400">Services</a>
+                    <a href="#industries" className="text-gray-200 hover:text-cyan-400">Industries</a>
+                    <a href="#case-studies" className="text-gray-200 hover:text-cyan-400">Case Studies</a>
+                    <a href="#contact" className="text-gray-200 hover:text-cyan-400">Contact</a>
+                  </div>
+
+                  {/* Mobile Menu Toggle */}
+                  <div className="flex items-center gap-3">
+                    <a href="#ilearn" className="hidden md:flex items-center gap-2">
+                      <img src={iLearnLogo} alt="iLearn" className="h-6 w-auto" />
+                    </a>
+                    <button
+                      className="md:hidden text-gray-200 text-2xl"
+                      onClick={() => setMenuOpen(!menuOpen)}
+                    >
+                      {menuOpen ? <FaTimes /> : <FaBars />}
+                    </button>
+                  </div>
+                </div>
+
+                {menuOpen && (
+                  <div className="md:hidden bg-gray-900/95 px-6 py-4 space-y-4 text-white font-medium border-t border-gray-800">
+                    {["hero", "about", "services", "industries", "case-studies", "contact", "ilearn"].map((link) => (
+                      <a
+                        key={link}
+                        href={`#${link}`}
+                        className="block"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {link.charAt(0).toUpperCase() + link.slice(1).replace("-", " ")}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </nav>
+
+              {/* HERO SECTION */}
+              <Hero />
+
+              {/* ABOUT */}
+              <section id="about" className="py-20 px-6 text-center">
+                <div className="max-w-6xl mx-auto">
+                  <h3 className="text-3xl font-bold text-white">
+                    About <span className="text-blue-400">Us</span>
+                  </h3>
+                  <p className="mt-6 text-lg text-gray-300 max-w-3xl mx-auto">
+                    At <strong className="text-blue-300">AifNN</strong> we combine AI, Automation and
+                    Engineering Excellence to transform complex challenges into smart, scalable solutions.
+                  </p>
+                </div>
+              </section>
+
+              {/* SERVICES */}
+              <section id="services" className="py-20 px-6">
+                <div className="max-w-7xl mx-auto">
+                  <h2 className="text-3xl font-bold text-center mb-8">Our Services</h2>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {[ 
+                      { icon: <Brain className="w-10 h-10 text-blue-400" />, title: "AI & Machine Learning" },
+                      { icon: <Layers className="w-10 h-10 text-green-400" />, title: "Digitization" },
+                      { icon: <Bot className="w-10 h-10 text-purple-400" />, title: "Automation" },
+                      { icon: <Cpu className="w-10 h-10 text-pink-400" />, title: "Engineering Services" },
+                    ].map((s) => (
+                      <motion.div key={s.title} whileHover={{ scale: 1.03 }} className="bg-gray-900/70 p-6 rounded-xl shadow">
+                        <div className="mb-4">{s.icon}</div>
+                        <h4 className="text-lg font-semibold text-indigo-300">{s.title}</h4>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              {/* CASE STUDIES */}
+              <section id="case-studies" className="py-16 px-6">
+                <div className="max-w-7xl mx-auto">
+                  <CaseStudies />
+                </div>
+              </section>
+
+              {/* CONTACT */}
+              <section id="contact" className="py-16 px-6">
+                <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-start">
+                  <div>
+                    <h3 className="text-3xl font-bold">Get in Touch</h3>
+                    <p className="text-gray-300 mt-4">
+                      Let us know about your project. We’ll respond within 1–2 business days.
+                    </p>
+                    <div className="mt-6 text-sm text-gray-400 space-y-2">
+                      <div>📞 +91 86605 06059</div>
+                      <div>
+                        📧{" "}
+                        <a href="mailto:shyla.mk@aifnn.com" className="text-blue-400 underline">
+                          shyla.mk@aifnn.com
+                        </a>
+                      </div>
+                      <div>🌐 www.aifnn.com</div>
+                    </div>
+                  </div>
+                  <ContactForm />
+                </div>
+              </section>
+
+              {/* MODAL */}
+              {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 p-4">
+                  <div className="bg-gray-900 rounded-xl shadow-lg p-6 w-full max-w-md">
+                    <button
+                      onClick={() => setShowModal(false)}
+                      className="text-gray-400 float-right"
+                    >
+                      ✕
+                    </button>
+                    <h3 className="text-2xl font-bold mb-4">
+                      Get Started with AifNN
+                    </h3>
+                    <ContactForm onSuccess={() => setShowModal(false)} />
+                  </div>
+                </div>
+              )}
+
+              {/* FOOTER */}
+              <footer className="bg-gray-900/70 border-t border-gray-800 mt-10">
+                <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between text-sm text-gray-400">
+                  <div>© {new Date().getFullYear()} AifNN — All rights reserved</div>
+                  <div className="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" className="hover:text-gray-200">Privacy</a>
+                    <a href="#" className="hover:text-gray-200">Terms</a>
+                  </div>
+                </div>
+              </footer>
+            </div>
+          }
+        />
+
+        {/* ✅ Thank You Page */}
+        <Route path="/thankyou" element={<ThankYou />} />
+      </Routes>
+    </Router>
+  );
+}

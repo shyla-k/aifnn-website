@@ -1,18 +1,5 @@
-import React from 'react';
+import React from "react";
 
-function Hero() {
-  return (
-    <section className="hero">
-      <h1>AI & Digital Transformation Services</h1>
-      <p>Empowering your business with intelligent, automated, and scalable solutions.</p>
-      <a href="#contact"><button>Get Started</button></a>
-    </section>
-  );
-}
-
-export default Hero;
-
-// Hero.jsx
 export default function Hero() {
   return (
     <section className="relative overflow-hidden min-h-screen flex items-center">
@@ -44,4 +31,3 @@ export default function Hero() {
     </section>
   );
 }
-

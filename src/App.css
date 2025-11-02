@@ -75,3 +75,18 @@ body {
   color: #a0aec0;
   font-size: 16px;
 }
+/* index.css or App.css */
+.gradient-border {
+  position: relative;
+  border-radius: 1rem;
+  background: linear-gradient(90deg, #2563eb, #4f46e5); /* from-blue-600 to-indigo-600 */
+  padding: 2px; /* border thickness */
+}
+
+.gradient-border > .inner {
+  background: #0f172a; /* same as bg-gray-900 or section background */
+  border-radius: 1rem;
+  height: 100%;
+  width: 100%;
+  padding: 2rem; /* inner padding */
+}
