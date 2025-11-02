@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import iLearnLogo from "./assets/iLearnjustlogo.png";
+import ContactForm from "./components/ContactForm";
 import { useState } from "react";
 import CaseStudies from "./components/CaseStudies";
 import Logo from "./assets/AifNN_darkbluebackground1.png";
@@ -30,23 +31,26 @@ function FormspreeContactForm() {
   const [status, setStatus] = React.useState("idle");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // stop normal navigation
     setStatus("submitting");
 
-    const form = e.target;
-    const data = new FormData(form);
+    const formData = new FormData(e.target);
 
-    const response = await fetch("https://formspree.io/f/mwopkak", {
- // 👈 Replace this
-      method: "POST",
-      body: data,
-      headers: { Accept: "application/json" },
-    });
+    try {
+      const response = await fetch("https://formspree.io/f/mwopkak", {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: formData,
+      });
 
-    if (response.ok) {
-      form.reset();
-      setStatus("success");
-    } else {
+      if (response.ok) {
+        setStatus("success");
+        e.target.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch (error) {
+      console.error("Submission failed:", error);
       setStatus("error");
     }
   };
@@ -54,6 +58,7 @@ function FormspreeContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
+      noValidate
       className="bg-gray-900 p-6 rounded-xl shadow transition-all"
     >
       {status === "success" ? (
@@ -64,25 +69,25 @@ function FormspreeContactForm() {
         <>
           <label className="block text-sm text-gray-300">Name</label>
           <input
-            className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
             name="name"
             required
+            className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
           />
 
           <label className="block text-sm mt-4 text-gray-300">Email</label>
           <input
-            className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
             type="email"
             name="email"
             required
+            className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
           />
 
           <label className="block text-sm mt-4 text-gray-300">Message</label>
           <textarea
-            className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
-            rows={4}
             name="message"
+            rows={4}
             required
+            className="mt-2 w-full border border-gray-700 bg-gray-800 rounded px-3 py-2 text-white"
           />
 
           <button
@@ -738,15 +743,41 @@ backgroundSize: "cover",
     </div>
 
     {/* ✅ Formspree-integrated form */}
-    <form
+    {/* ✅ Inline Contact Form with status message */}
+<form
   onSubmit={async (e) => {
     e.preventDefault();
 
-    const name = e.target.name.value;
-    const email = e.target.email.value;
-    const message = e.target.message.value;
+    // Local React state using useState hook
+    const form = e.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const message = form.message.value;
+
+    // Access React hooks from the parent (if you’re inside a component)
+    const setStatus = (status) => {
+      const msgEl = document.getElementById("contactMessage");
+      if (!msgEl) return;
+
+      msgEl.style.display = "block";
+
+      if (status === "sending") {
+        msgEl.textContent = "⏳ Sending your message...";
+        msgEl.className = "text-blue-400 text-center mt-4";
+      } else if (status === "success") {
+        msgEl.textContent = "✅ Thank you! Your message has been sent.";
+        msgEl.className = "text-green-400 text-center mt-4";
+        form.reset();
+        setTimeout(() => (msgEl.style.display = "none"), 5000); // hide after 5s
+      } else if (status === "error") {
+        msgEl.textContent = "❌ Something went wrong. Please try again.";
+        msgEl.className = "text-red-400 text-center mt-4";
+        setTimeout(() => (msgEl.style.display = "none"), 7000);
+      }
+    };
 
     try {
+      setStatus("sending");
       const res = await fetch("http://localhost:5000/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -754,20 +785,14 @@ backgroundSize: "cover",
       });
 
       const data = await res.json();
-      if (data.success) {
-        /*alert("✅ Message sent successfully!");*/
-        e.target.reset();
-        window.location.href = "/thank-you"; // redirect to thank you page
-      } else {
-        alert("❌ Failed to send message: " + (data.error || "unknown error"));
-      }
+      if (data.success) setStatus("success");
+      else setStatus("error");
     } catch (err) {
       console.error(err);
-      alert("❌ Something went wrong. Please try again later.");
+      setStatus("error");
     }
   }}
-  className="space-y-4 bg-gray-900 p-6 rounded-xl shadow-lg border border-[#0045ff80]
-" 
+  className="space-y-4 bg-gray-900 p-6 rounded-xl shadow-lg border border-[#0045ff80]"
 >
   <div>
     <label className="block text-gray-300 mb-2">Name</label>
@@ -775,9 +800,7 @@ backgroundSize: "cover",
       type="text"
       name="name"
       required
-      className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80]
-
-"
+      className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80]"
     />
   </div>
 
@@ -787,8 +810,7 @@ backgroundSize: "cover",
       type="email"
       name="email"
       required
-      className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80]
-"
+      className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80]"
     />
   </div>
 
@@ -798,27 +820,28 @@ backgroundSize: "cover",
       name="message"
       rows="4"
       required
-      className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80]
-"
+      className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80]"
     />
   </div>
 
   <button
     type="submit"
     className="mt-6 px-8 py-3 
-  bg-gradient-to-b from-[#052042] to-[#001229]
-  border border-[#0045ff80]
-  rounded-md
-  text-white font-semibold
-  shadow-[inset_0_0_10px_rgba(0,115,255,0.25)]
-  hover:shadow-[0_0_15px_rgba(0,115,255,0.4)]
-  hover:scale-105
-  transition-all duration-300"
+      bg-gradient-to-b from-[#052042] to-[#001229]
+      border border-[#0045ff80]
+      rounded-md
+      text-white font-semibold
+      shadow-[inset_0_0_10px_rgba(0,115,255,0.25)]
+      hover:shadow-[0_0_15px_rgba(0,115,255,0.4)]
+      hover:scale-105
+      transition-all duration-300"
   >
     Send Message
   </button>
-</form>
 
+  {/* Status message area */}
+  <p id="contactMessage" className="hidden text-center mt-4"></p>
+</form>
   </div>
 </section>
 
