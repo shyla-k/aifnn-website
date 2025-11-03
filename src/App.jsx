@@ -166,7 +166,7 @@ const [showModal, setShowModal] = useState(false);
     <a href="#industries" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Industries</a>
     <a href="#staffing" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Staffing</a> {/* ✅ Added */}
     <a href="#case-studies" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Case Studies</a>
- <a href="#Smart-Solutions" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Case Studies</a>
+ <a href="#Smart-Solutions" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Smart Solutions</a>
 
 
     <a href="#contact" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Contact</a>
