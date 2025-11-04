@@ -19,33 +19,34 @@ export default function ContactForm() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus("sending");
-    setFeedback("Sending your message...");
+  e.preventDefault();
+  setStatus("sending");
+  setFeedback("Sending your message...");
 
-    try {
-      const res = await fetch("api/sendMail", {
+  try {
+    const res = await fetch("/api/sendMail", {
+      // 👈 added leading slash
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+    const data = await res.json();
 
-      const data = await res.json();
-
-      if (data.success) {
-        setStatus("success");
-        setFeedback("✅ Thank you! Your message has been sent.");
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        throw new Error(data.error || "Unknown error");
-      }
-    } catch (err) {
-      console.error(err);
-      setStatus("error");
-      setFeedback("❌ Something went wrong. Please try again later.");
+    if (res.ok) {
+      setStatus("success");
+      setFeedback("✅ Thank you! Your message has been sent.");
+      setFormData({ name: "", email: "", message: "" });
+    } else {
+      throw new Error(data.message || "Failed to send");
     }
-  };
+  } catch (err) {
+    console.error("❌ Error:", err);
+    setStatus("error");
+    setFeedback("❌ Something went wrong. Please try again later.");
+  }
+};
+
 
   return (
     <form
