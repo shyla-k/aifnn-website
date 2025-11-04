@@ -32,6 +32,9 @@ export default function ContactForm() {
         body: JSON.stringify(formData),
       });
 
+       // 🪵 Log the HTTP status and raw response
+    console.log("📡 Response status:", res.status);
+
       const data = await res.json();
       console.log("📩 Response:", data);
 
@@ -43,7 +46,7 @@ export default function ContactForm() {
         throw new Error(data.message || "Failed to send");
       }
     } catch (err) {
-      console.error("❌ Error:", err);
+      console.error("❌ Error:", err.message);
       setStatus("error");
       setFeedback("❌ Something went wrong. Please try again later.");
     }
