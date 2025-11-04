@@ -1,8 +1,10 @@
 {
   "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": null,
   "builds": [
-    { "src": "api/sendMail.js", "use": "@vercel/node" },
-    { "src": "vite.config.js", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+    { "src": "api/sendMail.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
