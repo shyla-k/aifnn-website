@@ -1,10 +1,17 @@
 // api/sendMail.js
 import nodemailer from "nodemailer";
-res.setHeader("Access-Control-Allow-Origin", "*");
-res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-
 
 export default async function handler(req, res) {
+  // ✅ Allow CORS
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // ✅ Handle preflight (for mobile/Safari)
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -16,7 +23,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // ✅ Create Yahoo mail transporter
     const transporter = nodemailer.createTransport({
       service: "yahoo",
       auth: {
@@ -27,7 +33,7 @@ export default async function handler(req, res) {
 
     await transporter.sendMail({
       from: process.env.SMTP_USER,
-      to: process.env.SMTP_USER, // send to your own Yahoo inbox
+      to: process.env.SMTP_USER,
       subject: `New Contact Form Message from ${name}`,
       text: message,
       html: `
