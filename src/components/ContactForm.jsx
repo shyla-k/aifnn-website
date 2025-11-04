@@ -24,7 +24,8 @@ export default function ContactForm() {
     setFeedback("Sending your message...");
 
     try {
-      const res = await fetch("http://localhost:5000/send", {
+      const res = await fetch("api/sendMail", {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

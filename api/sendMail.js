@@ -13,27 +13,30 @@ export default async function handler(req, res) {
   }
 
   try {
+    // ✅ Create Yahoo mail transporter
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      service: "yahoo",
       auth: {
-        user: process.env.EMAIL_USER, // your Gmail address
-        pass: process.env.EMAIL_PASS, // your App Password (NOT normal Gmail password)
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
     });
 
     await transporter.sendMail({
-      from: email,
-      to: process.env.EMAIL_USER, // send to yourself
+      from: process.env.SMTP_USER,
+      to: process.env.SMTP_USER, // send to your own Yahoo inbox
       subject: `New Contact Form Message from ${name}`,
       text: message,
-      html: `<p><strong>Name:</strong> ${name}</p>
-             <p><strong>Email:</strong> ${email}</p>
-             <p><strong>Message:</strong><br>${message}</p>`,
+      html: `
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong><br>${message}</p>
+      `,
     });
 
-    return res.status(200).json({ message: "Email sent successfully" });
+    return res.status(200).json({ success: true, message: "Email sent successfully!" });
   } catch (error) {
-    console.error("Error sending email:", error);
-    return res.status(500).json({ message: "Failed to send email" });
+    console.error("❌ Email send failed:", error);
+    return res.status(500).json({ success: false, message: "Failed to send email." });
   }
 }
