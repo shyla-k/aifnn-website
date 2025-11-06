@@ -5,7 +5,7 @@ import iLearnLogo from "./assets/iLearnjustlogo.png";
 import ContactForm from "./components/ContactForm";
 import { useState } from "react";
 import CaseStudies from "./components/CaseStudies";
-import Logo from "./assets/AifNN_darkbluebackground1.png";
+//import Logo from "./assets/AifNN_darkbluebackground1.png";
 import ThankYou from "./pages/ThankYou"; // adjust path if needed
 import { Brain, Layers, Bot, Cpu } from "lucide-react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -126,7 +126,7 @@ const [showModal, setShowModal] = useState(false);
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
         {/* Logo + Tagline */}
         <div className="flex items-center gap-3">
-          <img src={Logo} alt="AifNN Logo" className="h-10 w-auto" />
+          <img src="/AifNN_darkbluebackground1.png" alt="AifNN Logo" className="h-10 w-auto" />
           <span className="text-sm font-medium text-gray-300">
             AI • ML • Automation • Digitization • Engineering
           </span>
