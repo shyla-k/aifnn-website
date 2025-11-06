@@ -1,6 +1,38 @@
 // api/sendMail.js
 import nodemailer from "nodemailer";
+const { name, email, message } = await req.json();
 
+  if (!name || !email || !message) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
+
+  try {
+    // ✅ Create a transporter
+    const transporter = nodemailer.createTransport({
+      service: "gmail", // or "hotmail", "yahoo", etc.
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // ✅ Define the email
+    const mailOptions = {
+      from: `"AIFNN Contact" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER, // send to yourself
+      subject: `New message from ${name}`,
+      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+    };
+
+    // ✅ Send email
+    await transporter.sendMail(mailOptions);
+
+    return res.status(200).json({ message: "Email sent successfully!" });
+  } catch (error) {
+    console.error("❌ Email send error:", error);
+    return res.status(500).json({ message: "Failed to send email." });
+  }
+}
 export default async function handler(req, res) {
   // ✅ Allow CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
