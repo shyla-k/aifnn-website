@@ -5,7 +5,6 @@ import iLearnLogo from "./assets/iLearnjustlogo.png";
 import ContactForm from "./components/ContactForm";
 import { useState } from "react";
 import CaseStudies from "./components/CaseStudies";
-//import Logo from "./assets/AifNN_darkbluebackground1.png";
 import ThankYou from "./pages/ThankYou"; // adjust path if needed
 import { Brain, Layers, Bot, Cpu } from "lucide-react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
