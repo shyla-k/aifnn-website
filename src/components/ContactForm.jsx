@@ -25,15 +25,16 @@ export default function ContactForm() {
 
     try {
       console.log("📤 Sending form data:", formData);
-      const res = await fetch("/api/sendMail", {
-        // ✅ always absolute root path
+
+      // ✅ FIXED: add missing backtick and correct path
+      const res = await fetch(`/api/sendMail`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-       // 🪵 Log the HTTP status and raw response
-    console.log("📡 Response status:", res.status);
+      // 🪵 Log status and data
+      console.log("📡 Response status:", res.status);
 
       const data = await res.json();
       console.log("📩 Response:", data);
