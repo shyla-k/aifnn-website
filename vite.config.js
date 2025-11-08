@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
 
-// ✅ Configure base for custom domain
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/',
-});
+  base: '/aifnn-website/', // 👈 must match your GitHub repo name exactly
+})
