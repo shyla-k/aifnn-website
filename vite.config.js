@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
 
-// ✅ Configure base for custom domain
+// ✅ For Vercel (base must be '/')
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  base: "/",
 });

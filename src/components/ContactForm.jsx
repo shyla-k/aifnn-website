@@ -5,6 +5,9 @@ export default function ContactForm() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState("idle");
   const [feedback, setFeedback] = useState("");
+  const apiUrl =
+        import.meta.env.VITE_API_URL ||
+        "https://git-repository-aifnn.vercel.app";
 
   // Hide feedback after 4 seconds
   useEffect(() => {
@@ -25,9 +28,7 @@ export default function ContactForm() {
 
     try {
       // ✅ Correct API endpoint (Vercel backend)
-      const apiUrl =
-        import.meta.env.VITE_API_URL ||
-        "https://git-repository-aifnn.vercel.app";
+      
 
       const res = await fetch(`${apiUrl}/api/sendMail`, {
         method: "POST",
