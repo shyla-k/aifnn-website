@@ -3,13 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://shyla-k.github.io/aifnn-website/",
+  
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
+   
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -25,7 +24,8 @@
     "react-dom": "^19.1.1",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.9.5",
-    "recharts": "^3.1.2"
+    "recharts": "^3.1.2",
+    "vercel": "^48.9.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

@@ -2,25 +2,14 @@
 import nodemailer from "nodemailer";
 
 export default async function handler(req, res) {
-  // ✅ Allow CORS (Desktop + Mobile + Safari)
-  res.setHeader("Access-Control-Allow-Origin", "https://www.aifnn.com");
+  // Allow CORS (for both desktop + mobile)
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-const allowedOrigins = [
-  "https://www.aifnn.com",
-  "http://localhost:5173",
-  "http://localhost:4173",
-];
-
-  const origin = req.headers.origin;
-if (allowedOrigins.includes(origin)) {
-  res.setHeader("Access-Control-Allow-Origin", origin);
-}
-
-if (req.method === "OPTIONS") {
-  return res.status(200).end();
-}
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
 
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
@@ -33,27 +22,25 @@ if (req.method === "OPTIONS") {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // ✅ Setup transporter (e.g., Gmail)
+    // Set up email transporter (Yahoo or Gmail)
     const transporter = nodemailer.createTransport({
-       host: "smtp.mail.yahoo.com",
-  port: 465,
-  secure: true,
+      service: "yahoo", // or "gmail"
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
     });
 
-    // ✅ Send mail
+    // Send the email
     await transporter.sendMail({
       from: `"AIFNN Contact" <${process.env.SMTP_USER}>`,
       to: process.env.SMTP_USER,
-      subject: `New Contact Message from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+      subject: `New Contact Form Message from ${name}`,
       html: `
         <p><b>Name:</b> ${name}</p>
         <p><b>Email:</b> ${email}</p>
-        <p><b>Message:</b><br/>${message}</p>
+        <p><b>Message:</b></p>
+        <p>${message}</p>
       `,
     });
 

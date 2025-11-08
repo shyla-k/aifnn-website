@@ -5,9 +5,13 @@ export default function ContactForm() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState("idle");
   const [feedback, setFeedback] = useState("");
-  const apiUrl =
-        import.meta.env.VITE_API_URL ||
-        "https://git-repository-aifnn.vercel.app";
+  // Automatically use localhost when developing
+const apiUrl =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:3000"
+    : import.meta.env.VITE_API_URL || "";
+
+
 
   // Hide feedback after 4 seconds
   useEffect(() => {
