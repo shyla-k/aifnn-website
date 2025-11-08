@@ -324,7 +324,7 @@ backgroundSize: "cover",
           subtitle: "98%",
           highlight: "Reliable performance",
           desc: "Custom  and consistent AI strategies and ML models ensuring smooth performance to enhance decision-making and unlock new opportunities.",
-          icon: <Brain className="w-8 h-8 text-blue-400" />,
+          //icon: <Brain className="w-8 h-8 text-blue-400" />,
         },
 {
           icon: <Layers className="w-10 h-10 text-green-400" />,
