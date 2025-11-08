@@ -25,9 +25,11 @@ export default function ContactForm() {
 
     try {
       console.log("📤 Sending form data:", formData);
+      const apiUrl =
+  import.meta.env.VITE_API_URL || "https://git-repository-aifnn.vercel.app/";
 
       // ✅ FIXED: add missing backtick and correct path
-      const res = await fetch(`/api/sendMail`, {
+      const res = await fetch(`${apiUrl}/api/sendMail`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
