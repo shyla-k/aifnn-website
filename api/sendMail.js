@@ -7,10 +7,20 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.method === "OPTIONS") {
-    // Preflight request for mobile Safari / browsers
-    return res.status(200).end();
-  }
+const allowedOrigins = [
+  "https://www.aifnn.com",
+  "http://localhost:5173",
+  "http://localhost:4173",
+];
+
+  const origin = req.headers.origin;
+if (allowedOrigins.includes(origin)) {
+  res.setHeader("Access-Control-Allow-Origin", origin);
+}
+
+if (req.method === "OPTIONS") {
+  return res.status(200).end();
+}
 
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
@@ -25,7 +35,9 @@ export default async function handler(req, res) {
 
     // ✅ Setup transporter (e.g., Gmail)
     const transporter = nodemailer.createTransport({
-      service: "gmail", // or "yahoo"
+       host: "smtp.mail.yahoo.com",
+  port: 465,
+  secure: true,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
