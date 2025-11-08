@@ -6,7 +6,7 @@ export default function ContactForm() {
   const [status, setStatus] = useState("idle");
   const [feedback, setFeedback] = useState("");
 
-  // Automatically hide feedback after 4s
+  // Hide feedback after 4 seconds
   useEffect(() => {
     if (status === "success" || status === "error") {
       const timer = setTimeout(() => setStatus("idle"), 4000);
@@ -24,22 +24,18 @@ export default function ContactForm() {
     setFeedback("Sending your message...");
 
     try {
-      console.log("📤 Sending form data:", formData);
+      // ✅ Correct API endpoint (Vercel backend)
       const apiUrl =
-  import.meta.env.VITE_API_URL || "https://git-repository-aifnn.vercel.app/";
+        import.meta.env.VITE_API_URL ||
+        "https://git-repository-aifnn.vercel.app";
 
-      // ✅ FIXED: add missing backtick and correct path
       const res = await fetch(`${apiUrl}/api/sendMail`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      // 🪵 Log status and data
-      console.log("📡 Response status:", res.status);
-
       const data = await res.json();
-      console.log("📩 Response:", data);
 
       if (res.ok) {
         setStatus("success");
@@ -64,7 +60,7 @@ export default function ContactForm() {
         Contact Us
       </h3>
 
-      {/* Name Field */}
+      {/* Name */}
       <div>
         <label className="block text-gray-300 mb-2">Name</label>
         <input
@@ -77,7 +73,7 @@ export default function ContactForm() {
         />
       </div>
 
-      {/* Email Field */}
+      {/* Email */}
       <div>
         <label className="block text-gray-300 mb-2">Email</label>
         <input
@@ -90,7 +86,7 @@ export default function ContactForm() {
         />
       </div>
 
-      {/* Message Field */}
+      {/* Message */}
       <div>
         <label className="block text-gray-300 mb-2">Message</label>
         <textarea
@@ -103,7 +99,7 @@ export default function ContactForm() {
         />
       </div>
 
-      {/* Submit Button */}
+      {/* Submit */}
       <button
         type="submit"
         disabled={status === "sending"}
@@ -116,7 +112,7 @@ export default function ContactForm() {
         {status === "sending" ? "Sending..." : "Send Message"}
       </button>
 
-      {/* Animated feedback message */}
+      {/* Feedback Message */}
       <AnimatePresence>
         {status !== "idle" && (
           <motion.p
