@@ -9,8 +9,6 @@ import ThankYou from "./pages/ThankYou"; // adjust path if needed
 import { Brain, Layers, Bot, Cpu } from "lucide-react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-
-
 import { 
   FaHospital, 
   FaMoneyBillWave, 
@@ -34,10 +32,6 @@ import Button from "./components/Button";
 function AICompanyWebsite() {
  const [menuOpen, setMenuOpen] = useState(false);
 const [showModal, setShowModal] = useState(false);
-const [loading, setLoading] = useState(false);
-const [emailValid, setEmailValid] = useState(false);
-const [checkingDomain, setCheckingDomain] = useState(false);
-
 
 const [formData, setFormData] = useState({ name: "", email: "", message: "" });
 const apiUrl =
@@ -337,7 +331,7 @@ backgroundSize: "cover",
  {
           title: "Agriculture",
           desc: "AI solutions for precision farming, crop monitoring, and sustainable agriculture.",
-          icon: <FaSeedling className="w-6 h-6 text-blue-400" />,
+          icon: <FaHospital className="w-6 h-6 text-blue-400" />,
         },
 {
           title: "Aerospace and Defense",
@@ -677,217 +671,68 @@ backgroundSize: "cover",
 {/* CONTACT FORM FIXED ✅ */}
 <form
   onSubmit={async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  const msgEl = document.getElementById("contactMessage");
-  msgEl.style.display = "block";
-  msgEl.textContent = "⏳ Sending your message...";
-  msgEl.className = "text-blue-400 text-center mt-4";
+    e.preventDefault();
 
-  try {
-    const res = await fetch(`${apiUrl}/api/sendMail`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    const msgEl = document.getElementById("contactMessage");
+    msgEl.style.display = "block";
+    msgEl.textContent = "⏳ Sending your message...";
+    msgEl.className = "text-blue-400 text-center mt-4";
 
-    const data = await res.json();
+    try {
+      const res = await fetch(`${apiUrl}/api/sendMail`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    if (res.ok && data.success) {
-      msgEl.textContent = "✅ Thank you! Your message has been sent.";
-      msgEl.className = "text-green-400 text-center mt-4";
-      setFormData({ name: "", email: "", message: "" });
-    } else {
-      msgEl.textContent = "❌ Something went wrong. Please try again.";
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        msgEl.textContent = "✅ Thank you! Your message has been sent.";
+        msgEl.className = "text-green-400 text-center mt-4";
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        msgEl.textContent = "❌ Something went wrong. Please try again.";
+        msgEl.className = "text-red-400 text-center mt-4";
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      msgEl.textContent = "❌ Network error. Please try again later.";
       msgEl.className = "text-red-400 text-center mt-4";
     }
-  } catch (error) {
-    console.error("Error submitting form:", error);
-    msgEl.textContent = "❌ Network error. Please try again later.";
-    msgEl.className = "text-red-400 text-center mt-4";
-  } finally {
-    setLoading(false);
-  }
 
-  setTimeout(() => (msgEl.style.display = "none"), 6000);
-}}
-
+    setTimeout(() => (msgEl.style.display = "none"), 6000);
+  }}
   className="space-y-4 bg-gray-900 p-6 rounded-xl shadow-lg border border-[#0045ff80]"
 >
-  {/* Name Field */}
   <div>
     <label className="block text-gray-300 mb-2">Name</label>
     <input
       type="text"
       name="name"
- autoComplete="name"
-  spellCheck="false"
       required
       value={formData.name}
-      onChange={(e) =>{
-  const value = e.target.value;
-  if (!/^[a-zA-Z\s]*$/.test(value)) {
-    e.target.setCustomValidity("Please use letters and spaces only");
-  } else {
-    e.target.setCustomValidity("");
-  } setFormData({ ...formData, name: e.target.value })}}
+      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
       className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80]"
     />
   </div>
 
-  
-{/* ✉️ Smart Email Field with Validation + Suggestions */}
-<div className="relative">
-  <label className="block text-gray-300 mb-2">Email</label>
-  <div className="relative">
+  <div>
+    <label className="block text-gray-300 mb-2">Email</label>
     <input
       type="email"
       name="email"
-      autoComplete="email"
-      spellCheck="false"
       required
       value={formData.email}
-      onChange={async (e) => {
-        const value = e.target.value.trim();
-        setFormData({ ...formData, email: value });
-
-        const msgEl = document.getElementById("emailValidationMsg");
-        const suggestionEl = document.getElementById("emailSuggestionMsg");
-
-        // 1️⃣ Basic format check
-        const basicEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!basicEmail.test(value)) {
-          msgEl.textContent = "❌ Please enter a valid email address.";
-          msgEl.className = "text-red-400 text-sm mt-1";
-          suggestionEl.textContent = "";
-          setEmailValid(false);
-          return;
-        }
-
-        // 2️⃣ Extract domain
-        const domain = value.split("@")[1]?.toLowerCase();
-        if (!domain) return;
-
-        // 3️⃣ Trusted domains
-        const trustedDomains = [
-          "gmail.com",
-          "yahoo.com",
-          "outlook.com",
-          "hotmail.com",
-          "protonmail.com",
-          "icloud.com",
-          "aifnn.com",
-        ];
-
-        // 4️⃣ Common typo correction map
-        const typoMap = {
-          "gnail.com": "gmail.com",
-          "gamil.com": "gmail.com",
-          "yahho.com": "yahoo.com",
-          "yaho.com": "yahoo.com",
-          "hotnail.com": "hotmail.com",
-          "outlok.com": "outlook.com",
-          "aifn.com": "aifnn.com",
-        };
-
-        // 5️⃣ If domain has a common typo, suggest correction
-        if (typoMap[domain]) {
-          suggestionEl.innerHTML = `
-            <span class="text-yellow-400 text-sm mt-1">
-              ⚠️ Did you mean 
-              <button 
-                type="button"
-                class="underline text-blue-400 hover:text-blue-300 ml-1"
-                onclick="this.closest('form').querySelector('input[name=email]').value='${value.split('@')[0]}@${typoMap[domain]}';
-                         this.closest('form').querySelector('#emailValidationMsg').textContent='✅ Domain corrected to ${typoMap[domain]}';
-                         this.closest('form').querySelector('#emailValidationMsg').className='text-green-400 text-sm mt-1';
-                         this.closest('form').querySelector('#emailSuggestionMsg').textContent='';
-                "
-              >${typoMap[domain]}</button> ?
-            </span>
-          `;
-        } else {
-          suggestionEl.textContent = "";
-        }
-
-        // 6️⃣ Auto-pass trusted domains
-        if (trustedDomains.includes(domain)) {
-          msgEl.textContent = "✅ Trusted email domain detected.";
-          msgEl.className = "text-green-400 text-sm mt-1";
-          setEmailValid(true);
-          return;
-        }
-
-        // 7️⃣ Otherwise check MX record
-        msgEl.textContent = "⏳ Checking domain...";
-        msgEl.className = "text-blue-400 text-sm mt-1";
-        setEmailValid(false);
-        setCheckingDomain(true);
-
-        try {
-          const res = await fetch(`https://dns.google/resolve?name=${domain}&type=MX`);
-          const data = await res.json();
-
-          if (data.Answer && data.Answer.length > 0) {
-            msgEl.textContent = `✅ Valid email domain (${domain}).`;
-            msgEl.className = "text-green-400 text-sm mt-1";
-            setEmailValid(true);
-          } else {
-            msgEl.textContent = `❌ Invalid or inactive domain: ${domain}`;
-            msgEl.className = "text-red-400 text-sm mt-1";
-            setEmailValid(false);
-          }
-        } catch {
-          msgEl.textContent = "⚠️ Could not verify this domain right now.";
-          msgEl.className = "text-yellow-400 text-sm mt-1";
-          setEmailValid(false);
-        } finally {
-          setCheckingDomain(false);
-        }
-      }}
-      className="w-full p-2 pr-10 rounded bg-gray-800 text-gray-200 border border-[#0045ff80] focus:ring-2 focus:ring-blue-500"
+      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+      className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80]"
     />
-
-    {/* Spinner when checking */}
-    {checkingDomain && (
-      <motion.div className="absolute right-3 top-3 w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></motion.div>
-    )}
-
-    {/* Green check when valid */}
-    {formData.email && emailValid && !checkingDomain && (
-      <motion.span
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="absolute right-3 top-3 text-green-400 text-xl"
-      >
-        ✔
-      </motion.span>
-    )}
-
-    {/* Red ⚠ when invalid */}
-    {formData.email && !emailValid && !checkingDomain && (
-      <motion.span
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="absolute right-3 top-3 text-red-400 text-xl"
-      >
-        ⚠
-      </motion.span>
-    )}
   </div>
 
-  {/* Inline Message */}
-  <p id="emailValidationMsg" className="text-gray-400 text-sm mt-1"></p>
-  <p id="emailSuggestionMsg" className="text-gray-400 text-sm mt-1"></p>
-</div>
-
-  {/* Message Field */}
   <div>
     <label className="block text-gray-300 mb-2">Message</label>
     <textarea
       name="message"
-autoComplete="off"
-  spellCheck="true"
       rows="4"
       required
       value={formData.message}
@@ -896,22 +741,20 @@ autoComplete="off"
     />
   </div>
 
-  {/* Submit Button */}
-<button
-  type="submit"
-  disabled={!emailValid || checkingDomain || loading}
-  className={`mt-6 px-8 py-3 rounded-md font-semibold transition-all duration-300
-    ${emailValid && !checkingDomain
-      ? "bg-blue-600 hover:scale-105"
-      : "bg-gray-600 cursor-not-allowed opacity-50"}`}
->
-  {checkingDomain
-    ? "Checking..."
-    : loading
-    ? "Sending..."
-    : "Send Message"}
-</button>
-
+  <button
+    type="submit"
+    className="mt-6 px-8 py-3 
+      bg-gradient-to-b from-[#052042] to-[#001229]
+      border border-[#0045ff80]
+      rounded-md
+      text-white font-semibold
+      shadow-[inset_0_0_10px_rgba(0,115,255,0.25)]
+      hover:shadow-[0_0_15px_rgba(0,115,255,0.4)]
+      hover:scale-105
+      transition-all duration-300"
+  >
+    Send Message
+  </button>
 
   <p id="contactMessage" className="hidden text-center mt-4"></p>
 </form>
