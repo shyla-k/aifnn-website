@@ -8,7 +8,7 @@ export default function ContactForm() {
   // Automatically use localhost when developing
 const apiUrl =
   import.meta.env.MODE === "development"
-    ? "http://localhost:5000" // or your local dev backend port
+    ? "http://localhost:3000" // or your local dev backend port
     : "https://www.aifnn.com";
 
 

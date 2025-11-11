@@ -42,7 +42,7 @@ const [checkingDomain, setCheckingDomain] = useState(false);
 const [formData, setFormData] = useState({ name: "", email: "", message: "" });
 const apiUrl =
   import.meta.env.MODE === "development"
-    ? "http://localhost:5000"
+    ? "http://localhost:3000"
     : "https://www.aifnn.com";
   return (
     <div className="pt-20 min-h-screen  bg-gradient-to-br from-[#0A2342] via-[#0E1E3F] to-black text-white antialiased">
