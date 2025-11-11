@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
   const { name, email, message } = req.body;
 
-  // 🧩 1. Validation
+  // Validation
   if (!name || !email || !message) {
     return res.status(400).json({ success: false, message: "All fields are required." });
   }
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ success: false, message: "Invalid email format." });
   }
 
-  // 🧩 2. Optional domain check (non-critical)
+  // Optional MX check
   const domain = email.split("@")[1];
   try {
     await dns.resolveMx(domain);
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
       sender: !!process.env.SENDER_EMAIL,
     });
 
-    // 🧩 3. Get Microsoft Graph token
+    // 1️⃣ Get Microsoft Graph token
     const tokenRes = await fetch(
       `https://login.microsoftonline.com/${process.env.TENANT_ID}/oauth2/v2.0/token`,
       {
@@ -54,7 +54,7 @@ export default async function handler(req, res) {
       throw new Error("Failed to obtain Microsoft Graph access token");
     }
 
-    // 🧩 4. Build email message
+    // 2️⃣ Create email
     const mailData = {
       message: {
         subject: `📩 New message from ${name} (${email})`,
@@ -76,18 +76,18 @@ export default async function handler(req, res) {
         },
         toRecipients: [{ emailAddress: { address: "Shyla.MK@aifnn.com" } }],
         bccRecipients: [{ emailAddress: { address: "shyla.mk@yahoo.com" } }],
-        replyTo: [{ emailAddress: { address: email, name } }], // 👈 user email here
+        replyTo: [{ emailAddress: { address: email, name } }],
         from: {
           emailAddress: {
             address: process.env.SENDER_EMAIL,
-            name: `${name} (via AifNN.com)`, // 👈 shows user name but safe sender
+            name: `${name} (via AifNN.com)`,
           },
         },
       },
       saveToSentItems: "false",
     };
 
-    // 🧩 5. Send via Microsoft Graph
+    // 3️⃣ Send mail via Microsoft Graph API
     const mailRes = await fetch(
       `https://graph.microsoft.com/v1.0/users/${process.env.SENDER_EMAIL}/sendMail`,
       {
