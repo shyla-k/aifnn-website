@@ -34,7 +34,7 @@ const apiUrl =
       // ✅ Correct API endpoint (Vercel backend)
       
 
-      const res = await fetch(`${apiUrl}/api/sendMail`, {
+      const res = await fetch("/api/sendMail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
