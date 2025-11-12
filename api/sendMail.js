@@ -22,15 +22,28 @@ export default async function handler(req, res) {
     }
 
     // Configure transporter (Yahoo example)
-    const transporter = nodemailer.createTransport({
-      host: "smtp.mail.yahoo.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
+   await transporter.sendMail({
+  from: `"${name}" <${process.env.SMTP_USER}>`,
+  to: "Shyla.MK@aifnn.com",
+  bcc: "mk_shyla@yahoo.com",
+  replyTo: email,
+  subject: `📩 New Contact Form Message from ${name}`,
+  html: `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+      <h3>New Contact Form Submission</h3>
+      <p><b>Name:</b> ${name}</p>
+      <p><b>Email:</b> ${email}</p>
+      <p><b>Message:</b></p>
+      <p>${message}</p>
+      <hr />
+      <p style="font-size: 12px; color: gray;">
+        Sent automatically from <a href="https://www.aifnn.com">AifNN.com</a>.
+      </p>
+    </div>
+  `,
+});
+
+
 
     // Verify transporter before sending
     await transporter.verify();
