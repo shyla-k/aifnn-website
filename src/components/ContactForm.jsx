@@ -138,34 +138,31 @@ export default function ContactForm() {
 
       {/* Submit Button */}
       <motion.button
-        type="submit"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        animate={{
-          scale: formReady ? (hovered ? 1.05 : [1, 1.03, 1]) : 1,
-          boxShadow:
-            formReady && status !== "sending"
-              ? hovered
-                ? "0 0 28px rgba(0,145,255,1)"
-                : "0 0 18px rgba(0,115,255,0.8)"
-              : "0 0 0 rgba(0,0,0,0)",
-        }}
-        transition={{
-          duration: hovered ? 0.25 : 1.5,
-          repeat: !hovered && formReady ? Infinity : 0,
-          repeatType: "mirror",
-        }}
-        className={`mt-6 w-full px-8 py-3 rounded-md font-semibold text-white transition-all duration-300 ${
-          status === "sending"
-            ? "bg-gray-600 cursor-wait"
-            : "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80]"
-        }`}
-        style={{
-          background: "linear-gradient(145deg, #001229, #052042)",
-        }}
-      >
-        {status === "sending" ? "Sending..." : "Send Message"}
-      </motion.button>
+  type="submit"
+  onMouseEnter={() => setHovered(true)}
+  onMouseLeave={() => setHovered(false)}
+  animate={{
+    scale: hovered ? 1.05 : 1,
+    boxShadow: hovered
+      ? "0 0 25px rgba(0,150,255,0.9)"
+      : "0 0 15px rgba(0,115,255,0.5)",
+  }}
+  transition={{ duration: 0.3 }}
+  className="mt-6 w-full px-8 py-3 rounded-md font-semibold text-white
+    bg-[#07162b] border border-[#0045ff80] 
+    shadow-[0_0_15px_rgba(0,115,255,0.3)]
+    hover:shadow-[0_0_25px_rgba(0,145,255,0.8)]
+    hover:border-[#0095ff] 
+    hover:scale-105 
+    transition-all duration-300 ease-in-out"
+  style={{
+    background: "linear-gradient(180deg, #0a1c33 0%, #001229 100%)",
+    textShadow: "0 0 8px rgba(255,255,255,0.2)",
+  }}
+>
+  {status === "sending" ? "Sending..." : "Send Message"}
+</motion.button>
+
 
       {/* Feedback */}
       <AnimatePresence>
