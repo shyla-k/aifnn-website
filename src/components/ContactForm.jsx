@@ -13,7 +13,7 @@ export default function ContactForm() {
       ? "http://localhost:3000"
       : "https://www.aifnn.com";
 
-  // Auto hide feedback
+  // Hide feedback after 4s
   useEffect(() => {
     if (status === "success" || status === "error") {
       const timer = setTimeout(() => setStatus("idle"), 4000);
@@ -21,7 +21,7 @@ export default function ContactForm() {
     }
   }, [status]);
 
-  // Input change handler
+  // Handle input + validation
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -60,12 +60,28 @@ export default function ContactForm() {
     }
   };
 
+  // Check if form ready to send
+  const formReady =
+    formData.name.trim() && formData.message.trim() && emailValid && formData.email.trim();
+
+  // Input style (dynamic glow)
+  const inputClass = (isValid) =>
+    `w-full p-2 rounded bg-gray-800 text-gray-200 border focus:outline-none focus:ring-2 ${
+      formReady
+        ? "border-blue-500 ring-1 ring-blue-400 shadow-[0_0_10px_rgba(0,115,255,0.4)]"
+        : isValid
+        ? "border-[#0045ff80] focus:ring-blue-500"
+        : "border-red-500 focus:ring-red-500"
+    }`;
+
   return (
     <form
       onSubmit={handleSubmit}
       className="space-y-4 bg-gray-900 p-6 rounded-xl shadow-lg border border-[#0045ff80] max-w-lg mx-auto w-full"
     >
-      <h3 className="text-2xl font-bold text-white text-center mb-4">Contact Us</h3>
+      <h3 className="text-2xl font-bold text-white text-center mb-4">
+        Contact Us
+      </h3>
 
       {/* Name */}
       <div>
@@ -76,7 +92,7 @@ export default function ContactForm() {
           value={formData.name}
           onChange={handleChange}
           required
-          className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={inputClass(true)}
         />
       </div>
 
@@ -89,11 +105,7 @@ export default function ContactForm() {
           value={formData.email}
           onChange={handleChange}
           required
-          className={`w-full p-2 rounded bg-gray-800 text-gray-200 border focus:outline-none focus:ring-2 ${
-            emailValid
-              ? "border-[#0045ff80] focus:ring-blue-500"
-              : "border-red-500 focus:ring-red-500"
-          }`}
+          className={inputClass(emailValid)}
         />
         {formData.email && (
           <p
@@ -115,33 +127,32 @@ export default function ContactForm() {
           value={formData.message}
           onChange={handleChange}
           required
-          className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={inputClass(true)}
         />
       </div>
 
       {/* Submit Button */}
       <motion.button
         type="submit"
-        disabled={status === "sending" || !emailValid || !formData.email}
+        disabled={status === "sending" || !formReady}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         animate={{
-          scale:
-            !emailValid || !formData.email || status === "sending" ? 1 : hovered ? 1.05 : [1, 1.03, 1],
+          scale: !formReady || status === "sending" ? 1 : hovered ? 1.05 : [1, 1.03, 1],
           boxShadow:
-            emailValid && formData.email && status !== "sending"
+            formReady && status !== "sending"
               ? hovered
-                ? "0 0 25px rgba(0, 145, 255, 1)"
-                : "0 0 18px rgba(0, 115, 255, 0.8)"
-              : "0 0 0px rgba(0,0,0,0)",
+                ? "0 0 28px rgba(0,145,255,1)"
+                : "0 0 18px rgba(0,115,255,0.8)"
+              : "0 0 0 rgba(0,0,0,0)",
         }}
         transition={{
           duration: hovered ? 0.25 : 1.5,
-          repeat: !hovered && emailValid && formData.email ? Infinity : 0,
+          repeat: !hovered && formReady ? Infinity : 0,
           repeatType: "mirror",
         }}
         className={`mt-6 w-full px-8 py-3 rounded-md font-semibold text-white transition-all duration-300 ${
-          status === "sending" || !emailValid || !formData.email
+          status === "sending" || !formReady
             ? "bg-gray-600 cursor-not-allowed"
             : "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80]"
         }`}
