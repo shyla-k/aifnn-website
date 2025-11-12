@@ -13,7 +13,7 @@ export default function ContactForm() {
       ? "http://localhost:3000"
       : "https://www.aifnn.com";
 
-  // Hide feedback after 4s
+  // Hide feedback after 4 seconds
   useEffect(() => {
     if (status === "success" || status === "error") {
       const timer = setTimeout(() => setStatus("idle"), 4000);
@@ -32,9 +32,16 @@ export default function ContactForm() {
     }
   };
 
-  // Form submit
+  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!emailValid) {
+      setStatus("error");
+      setFeedback("❌ Invalid email. Cannot send request.");
+      return;
+    }
+
     setStatus("sending");
     setFeedback("Sending your message...");
 
@@ -46,6 +53,7 @@ export default function ContactForm() {
       });
 
       const data = await res.json();
+
       if (res.ok) {
         setStatus("success");
         setFeedback("✅ Thank you! Your message has been sent.");
@@ -60,11 +68,10 @@ export default function ContactForm() {
     }
   };
 
-  // Check if form ready to send
   const formReady =
-    formData.name.trim() && formData.message.trim() && emailValid && formData.email.trim();
+    formData.name.trim() && formData.message.trim() && formData.email.trim();
 
-  // Input style (dynamic glow)
+  // Input style (glow if form ready)
   const inputClass = (isValid) =>
     `w-full p-2 rounded bg-gray-800 text-gray-200 border focus:outline-none focus:ring-2 ${
       formReady
@@ -79,9 +86,7 @@ export default function ContactForm() {
       onSubmit={handleSubmit}
       className="space-y-4 bg-gray-900 p-6 rounded-xl shadow-lg border border-[#0045ff80] max-w-lg mx-auto w-full"
     >
-      <h3 className="text-2xl font-bold text-white text-center mb-4">
-        Contact Us
-      </h3>
+      <h3 className="text-2xl font-bold text-white text-center mb-4">Contact Us</h3>
 
       {/* Name */}
       <div>
@@ -134,11 +139,10 @@ export default function ContactForm() {
       {/* Submit Button */}
       <motion.button
         type="submit"
-        disabled={status === "sending" || !formReady}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         animate={{
-          scale: !formReady || status === "sending" ? 1 : hovered ? 1.05 : [1, 1.03, 1],
+          scale: formReady ? (hovered ? 1.05 : [1, 1.03, 1]) : 1,
           boxShadow:
             formReady && status !== "sending"
               ? hovered
@@ -152,8 +156,8 @@ export default function ContactForm() {
           repeatType: "mirror",
         }}
         className={`mt-6 w-full px-8 py-3 rounded-md font-semibold text-white transition-all duration-300 ${
-          status === "sending" || !formReady
-            ? "bg-gray-600 cursor-not-allowed"
+          status === "sending"
+            ? "bg-gray-600 cursor-wait"
             : "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80]"
         }`}
         style={{
