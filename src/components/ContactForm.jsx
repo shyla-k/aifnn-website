@@ -142,26 +142,44 @@ export default function ContactForm() {
   onMouseEnter={() => setHovered(true)}
   onMouseLeave={() => setHovered(false)}
   animate={{
-    scale: hovered ? 1.05 : 1,
-    boxShadow: hovered
-      ? "0 0 25px rgba(0,150,255,0.9)"
-      : "0 0 15px rgba(0,115,255,0.5)",
+    scale: formReady ? (hovered ? 1.05 : [1, 1.03, 1]) : 1,
+    // use animated shadow for subtle pulse when ready
+    boxShadow:
+      formReady && status !== "sending"
+        ? hovered
+          ? "0 8px 30px rgba(0,145,255,0.95), inset 0 2px 8px rgba(255,255,255,0.03)"
+          : "0 6px 18px rgba(0,115,255,0.7), inset 0 1px 6px rgba(255,255,255,0.02)"
+        : "none",
   }}
-  transition={{ duration: 0.3 }}
-  className="mt-6 w-full px-8 py-3 rounded-md font-semibold text-white
-    bg-[#07162b] border border-[#0045ff80] 
-    shadow-[0_0_15px_rgba(0,115,255,0.3)]
-    hover:shadow-[0_0_25px_rgba(0,145,255,0.8)]
-    hover:border-[#0095ff] 
-    hover:scale-105 
-    transition-all duration-300 ease-in-out"
+  transition={{
+    duration: hovered ? 0.18 : 1.2,
+    repeat: !hovered && formReady ? Infinity : 0,
+    repeatType: "mirror",
+  }}
+  // minimal Tailwind classes — visual rules are inline to avoid being purged/overridden
+  className="mt-6 w-full px-8 py-3 rounded-md font-semibold text-white focus:outline-none"
   style={{
-    background: "linear-gradient(180deg, #0a1c33 0%, #001229 100%)",
-    textShadow: "0 0 8px rgba(255,255,255,0.2)",
+    // main glossy gradient
+    background: "linear-gradient(180deg, #07162b 0%, #001229 100%)",
+    border: "1px solid rgba(0,125,255,0.35)",
+    color: "#ffffff",
+    // inner subtle sheen
+    textShadow: "0 1px 0 rgba(255,255,255,0.06)",
+    // base low glow (visible when not hovered, stronger animated boxShadow above)
+    boxShadow:
+      formReady && status !== "sending"
+        ? "0 6px 18px rgba(0,115,255,0.6), inset 0 1px 6px rgba(255,255,255,0.02)"
+        : "none",
+    // smoother transform on hover/press handled by framer
+    transition: "transform .15s ease, box-shadow .15s ease",
+    // ensure button isn't visually dimmed by opacity or pointer events
+    opacity: status === "sending" ? 0.85 : 1,
+    cursor: status === "sending" ? "wait" : "pointer",
   }}
 >
   {status === "sending" ? "Sending..." : "Send Message"}
 </motion.button>
+
 
 
       {/* Feedback */}
