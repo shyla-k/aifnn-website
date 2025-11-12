@@ -6,13 +6,14 @@ export default function ContactForm() {
   const [status, setStatus] = useState("idle");
   const [feedback, setFeedback] = useState("");
   const [emailValid, setEmailValid] = useState(true);
+  const [hovered, setHovered] = useState(false);
 
   const apiUrl =
     import.meta.env.MODE === "development"
       ? "http://localhost:3000"
       : "https://www.aifnn.com";
 
-  // Hide feedback after 4 seconds
+  // Auto hide feedback
   useEffect(() => {
     if (status === "success" || status === "error") {
       const timer = setTimeout(() => setStatus("idle"), 4000);
@@ -20,18 +21,18 @@ export default function ContactForm() {
     }
   }, [status]);
 
-  // Handle input
+  // Input change handler
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // Validate email live
     if (name === "email") {
       const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-      setEmailValid(isValid || value === ""); // neutral when empty
+      setEmailValid(isValid || value === "");
     }
   };
 
+  // Form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("sending");
@@ -45,7 +46,6 @@ export default function ContactForm() {
       });
 
       const data = await res.json();
-
       if (res.ok) {
         setStatus("success");
         setFeedback("✅ Thank you! Your message has been sent.");
@@ -123,23 +123,27 @@ export default function ContactForm() {
       <motion.button
         type="submit"
         disabled={status === "sending" || !emailValid || !formData.email}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
         animate={{
           scale:
-            !emailValid || !formData.email || status === "sending" ? 1 : [1, 1.03, 1],
+            !emailValid || !formData.email || status === "sending" ? 1 : hovered ? 1.05 : [1, 1.03, 1],
           boxShadow:
             emailValid && formData.email && status !== "sending"
-              ? "0 0 20px rgba(0, 115, 255, 0.8)"
+              ? hovered
+                ? "0 0 25px rgba(0, 145, 255, 1)"
+                : "0 0 18px rgba(0, 115, 255, 0.8)"
               : "0 0 0px rgba(0,0,0,0)",
         }}
         transition={{
-          duration: 1.5,
-          repeat: emailValid && formData.email ? Infinity : 0,
+          duration: hovered ? 0.25 : 1.5,
+          repeat: !hovered && emailValid && formData.email ? Infinity : 0,
           repeatType: "mirror",
         }}
         className={`mt-6 w-full px-8 py-3 rounded-md font-semibold text-white transition-all duration-300 ${
           status === "sending" || !emailValid || !formData.email
             ? "bg-gray-600 cursor-not-allowed"
-            : "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80] hover:scale-105"
+            : "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80]"
         }`}
         style={{
           background: "linear-gradient(145deg, #001229, #052042)",
