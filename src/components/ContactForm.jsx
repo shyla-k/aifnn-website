@@ -5,13 +5,14 @@ export default function ContactForm() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState("idle");
   const [feedback, setFeedback] = useState("");
-  const [emailValid, setEmailValid] = useState(null);
+  const [emailValid, setEmailValid] = useState(true);
 
   const apiUrl =
     import.meta.env.MODE === "development"
       ? "http://localhost:3000"
       : "https://www.aifnn.com";
 
+  // Hide feedback after 4 seconds
   useEffect(() => {
     if (status === "success" || status === "error") {
       const timer = setTimeout(() => setStatus("idle"), 4000);
@@ -19,29 +20,20 @@ export default function ContactForm() {
     }
   }, [status]);
 
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+  // Handle input
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({ ...formData, [name]: value });
 
+    // Validate email live
     if (name === "email") {
-      if (value.trim() === "") {
-        setEmailValid(null);
-      } else {
-        setEmailValid(emailPattern.test(value));
-      }
+      const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      setEmailValid(isValid || value === ""); // neutral when empty
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!emailValid) {
-      setFeedback("❌ Please enter a valid email before sending.");
-      setStatus("error");
-      return;
-    }
-
     setStatus("sending");
     setFeedback("Sending your message...");
 
@@ -58,7 +50,6 @@ export default function ContactForm() {
         setStatus("success");
         setFeedback("✅ Thank you! Your message has been sent.");
         setFormData({ name: "", email: "", message: "" });
-        setEmailValid(null);
       } else {
         throw new Error(data.message || "Failed to send");
       }
@@ -74,9 +65,7 @@ export default function ContactForm() {
       onSubmit={handleSubmit}
       className="space-y-4 bg-gray-900 p-6 rounded-xl shadow-lg border border-[#0045ff80] max-w-lg mx-auto w-full"
     >
-      <h3 className="text-2xl font-bold text-white text-center mb-4">
-        Contact Us
-      </h3>
+      <h3 className="text-2xl font-bold text-white text-center mb-4">Contact Us</h3>
 
       {/* Name */}
       <div>
@@ -100,25 +89,20 @@ export default function ContactForm() {
           value={formData.email}
           onChange={handleChange}
           required
-          className={`w-full p-2 rounded bg-gray-800 text-gray-200 border ${
-            emailValid === null
-              ? "border-[#0045ff80]"
-              : emailValid
-              ? "border-green-500"
-              : "border-red-500"
-          } focus:outline-none focus:ring-2 ${
-            emailValid === null
-              ? "focus:ring-blue-500"
-              : emailValid
-              ? "focus:ring-green-500"
-              : "focus:ring-red-500"
+          className={`w-full p-2 rounded bg-gray-800 text-gray-200 border focus:outline-none focus:ring-2 ${
+            emailValid
+              ? "border-[#0045ff80] focus:ring-blue-500"
+              : "border-red-500 focus:ring-red-500"
           }`}
         />
-        {emailValid === true && (
-          <p className="text-green-400 text-sm mt-1">✅ Valid email address</p>
-        )}
-        {emailValid === false && (
-          <p className="text-red-400 text-sm mt-1">❌ Invalid email format</p>
+        {formData.email && (
+          <p
+            className={`mt-1 text-sm ${
+              emailValid ? "text-green-400" : "text-red-400"
+            }`}
+          >
+            {emailValid ? "✔ Valid email" : "❌ Invalid email"}
+          </p>
         )}
       </div>
 
@@ -136,40 +120,35 @@ export default function ContactForm() {
       </div>
 
       {/* Submit Button */}
-      <button
+      <motion.button
         type="submit"
-        disabled={
-          status === "sending" ||
-          emailValid === false ||
-          emailValid === null ||
-          formData.email.trim() === ""
-        }
-        className={`relative mt-6 w-full px-8 py-3 rounded-lg font-semibold text-white text-lg transition-all duration-300
-        ${
-          status === "sending" || emailValid === false || emailValid === null
-            ? "bg-[#0b1830] cursor-not-allowed opacity-70"
-            : "bg-gradient-to-b from-[#0b1830] to-[#001229] border border-blue-700 hover:scale-[1.03] active:scale-[0.98]"
-        }
-        overflow-hidden`}
-        style={{
+        disabled={status === "sending" || !emailValid || !formData.email}
+        animate={{
+          scale:
+            !emailValid || !formData.email || status === "sending" ? 1 : [1, 1.03, 1],
           boxShadow:
-            emailValid && status !== "sending"
-              ? "0 0 15px rgba(0,115,255,0.6), inset 0 0 8px rgba(0,115,255,0.4)"
-              : "inset 0 0 6px rgba(0,120,255,0.3)",
-          animation:
-            emailValid && status !== "sending"
-              ? "pulseGlow 2s ease-in-out infinite"
-              : "none",
+            emailValid && formData.email && status !== "sending"
+              ? "0 0 20px rgba(0, 115, 255, 0.8)"
+              : "0 0 0px rgba(0,0,0,0)",
+        }}
+        transition={{
+          duration: 1.5,
+          repeat: emailValid && formData.email ? Infinity : 0,
+          repeatType: "mirror",
+        }}
+        className={`mt-6 w-full px-8 py-3 rounded-md font-semibold text-white transition-all duration-300 ${
+          status === "sending" || !emailValid || !formData.email
+            ? "bg-gray-600 cursor-not-allowed"
+            : "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80] hover:scale-105"
+        }`}
+        style={{
+          background: "linear-gradient(145deg, #001229, #052042)",
         }}
       >
-        {status === "sending"
-          ? "Sending..."
-          : emailValid === false
-          ? "Invalid Email"
-          : "Send Message"}
-      </button>
+        {status === "sending" ? "Sending..." : "Send Message"}
+      </motion.button>
 
-      {/* Feedback Message */}
+      {/* Feedback */}
       <AnimatePresence>
         {status !== "idle" && (
           <motion.p
@@ -190,24 +169,6 @@ export default function ContactForm() {
           </motion.p>
         )}
       </AnimatePresence>
-
-      {/* Pulsing Glow Animation */}
-      <style jsx>{`
-        @keyframes pulseGlow {
-          0% {
-            box-shadow: 0 0 12px rgba(0, 115, 255, 0.5),
-              inset 0 0 6px rgba(0, 115, 255, 0.4);
-          }
-          50% {
-            box-shadow: 0 0 20px rgba(0, 115, 255, 0.8),
-              inset 0 0 10px rgba(0, 115, 255, 0.6);
-          }
-          100% {
-            box-shadow: 0 0 12px rgba(0, 115, 255, 0.5),
-              inset 0 0 6px rgba(0, 115, 255, 0.4);
-          }
-        }
-      `}</style>
     </form>
   );
 }
