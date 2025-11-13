@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import iLearnLogo from "./assets/iLearnjustlogo.png";
-import ContactForm from "./components/ContactForm";
+//import ContactForm from "./components/ContactForm";
 import { useState } from "react";
 import CaseStudies from "./components/CaseStudies";
 import ThankYou from "./pages/ThankYou"; // adjust path if needed
