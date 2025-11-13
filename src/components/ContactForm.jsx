@@ -311,7 +311,7 @@ export default function ContactForm() {
       <button
         type="submit"
         // per your request: do NOT disable the button visually; to avoid double submits we ignore when status === 'sending' in handler.
-        className="mt-6 w-full py-3 px-10 rounded-2xl font-semibold text-white 
+        className="mt-6 w-50 py-3 px-10 rounded-2xl font-semibold text-white 
                    bg-gradient-to-r from-[#052042] to-[#001229] 
                    border border-[#0045ff80]
                    shadow-[0_0_12px_rgba(0,115,255,0.4)]
