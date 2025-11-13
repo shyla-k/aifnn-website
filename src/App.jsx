@@ -677,40 +677,51 @@ backgroundSize: "cover",
 {/* CONTACT FORM FIXED ✅ */}
 <form
   onSubmit={async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  const msgEl = document.getElementById("contactMessage");
-  msgEl.style.display = "block";
-  msgEl.textContent = "⏳ Sending your message...";
-  msgEl.className = "text-blue-400 text-center mt-4";
+    e.preventDefault();
 
-  try {
-    const res = await fetch(`${apiUrl}/api/sendMail`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    const msgEl = document.getElementById("contactMessage");
+    msgEl.style.display = "block";
 
-    const data = await res.json();
-
-    if (res.ok && data.success) {
-      msgEl.textContent = "✅ Thank you! Your message has been sent.";
-      msgEl.className = "text-green-400 text-center mt-4";
-      setFormData({ name: "", email: "", message: "" });
-    } else {
-      msgEl.textContent = "❌ Something went wrong. Please try again.";
+    // ⚠️ Stop here if invalid email
+    if (!emailValid) {
+      msgEl.textContent = "❌ Invalid email. Message not sent.";
       msgEl.className = "text-red-400 text-center mt-4";
+      setTimeout(() => (msgEl.style.display = "none"), 4000);
+      return;
     }
-  } catch (error) {
-    console.error("Error submitting form:", error);
-    msgEl.textContent = "❌ Network error. Please try again later.";
-    msgEl.className = "text-red-400 text-center mt-4";
-  } finally {
-    setLoading(false);
-  }
 
-  setTimeout(() => (msgEl.style.display = "none"), 6000);
-}}
+    // Otherwise, send normally
+    setLoading(true);
+    msgEl.textContent = "⏳ Sending your message...";
+    msgEl.className = "text-blue-400 text-center mt-4";
+
+    try {
+      const res = await fetch(`${apiUrl}/api/sendMail`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        msgEl.textContent = "✅ Thank you! Your message has been sent.";
+        msgEl.className = "text-green-400 text-center mt-4";
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        msgEl.textContent = "❌ Something went wrong. Please try again.";
+        msgEl.className = "text-red-400 text-center mt-4";
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      msgEl.textContent = "❌ Network error. Please try again later.";
+      msgEl.className = "text-red-400 text-center mt-4";
+    } finally {
+      setLoading(false);
+      setTimeout(() => (msgEl.style.display = "none"), 6000);
+    }
+  }}
+
 
   className="space-y-4 bg-gray-900 p-6 rounded-xl shadow-lg border border-[#0045ff80]"
 >
