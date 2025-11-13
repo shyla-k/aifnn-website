@@ -106,16 +106,13 @@ const apiUrl =
 
       {/* Submit */}
       <button
-        type="submit"
-        disabled={status === "sending"}
-        className={`mt-6 w-full px-8 py-3 rounded-md font-semibold text-white transition-all duration-300 ${
-          status === "sending"
-            ? "bg-gray-600 cursor-not-allowed"
-            : "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80] hover:scale-105 hover:shadow-[0_0_15px_rgba(0,115,255,0.4)]"
-        }`}
-      >
-        {status === "sending" ? "Sending..." : "Send Message"}
-      </button>
+  type="submit"
+  className="mt-6 w-full py-3 px-10 rounded-2xl font-semibold text-white bg-gradient-to-r from-[#003366] to-[#0052cc] 
+             shadow-[0_0_10px_rgba(0,115,255,0.5)] hover:shadow-[0_0_20px_rgba(0,115,255,0.8)] 
+             hover:scale-105 transition-all duration-300 border border-[#0045ff80] tracking-wide"
+>
+  {status === "sending" ? "Sending..." : "Send Message"}
+</button>
 
       {/* Feedback Message */}
       <AnimatePresence>
