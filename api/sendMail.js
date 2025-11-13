@@ -36,35 +36,52 @@ export default async function handler(req, res) {
     await transporter.verify();
 
     // ✅ Inline-styled, Yahoo-safe HTML email
-    const htmlContent = `
-      <div style="background-color:#f4f7fb;padding:20px;font-family:'Segoe UI',Arial,sans-serif;">
-        <table style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-          <tr>
-            <td style="background:linear-gradient(90deg,#052042,#001229);text-align:center;padding:25px 15px;">
-              <img src="https://www.aifnn.com/assets/AifNN_darkbluebackground1.png" alt="AifNN Logo" style="height:70px;margin-bottom:10px;">
-              <h2 style="color:#ffffff;margin:0;font-size:22px;">New Message from AifNN</h2>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:25px;color:#333;">
-              <p style="font-size:16px;">You’ve received a new message from your website contact form:</p>
+  const htmlContent = `
+  <div style="background-color:#f4f7fb;padding:30px 0;font-family:'Segoe UI',Arial,sans-serif;">
+    <table style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <tr>
+        <td style="background:linear-gradient(90deg,#052042,#001229);text-align:center;padding:25px 15px;">
+          <!-- ✅ Fix: explicit image width/height for Outlook -->
+          <img src="https://www.aifnn.com/assets/AifNN_darkbluebackground1.png"
+               alt="AifNN Logo"
+               width="120"
+               height="120"
+               style="display:block;margin:0 auto;border-radius:8px;">
+          <h2 style="color:#ffffff;margin:15px 0 0;font-size:22px;font-weight:600;">
+            AifNN Contact Form Message
+          </h2>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:30px;color:#333;">
+          <p style="font-size:16px;line-height:1.6;margin:0 0 10px;">
+            You’ve received a new message from your website contact form:
+          </p>
 
-              <table style="width:100%;margin-top:20px;border-collapse:collapse;">
-                <tr><td style="font-weight:bold;padding:5px 0;width:80px;">Name:</td><td>${name}</td></tr>
-                <tr><td style="font-weight:bold;padding:5px 0;">Email:</td><td>${email}</td></tr>
-                <tr><td style="font-weight:bold;padding:5px 0;vertical-align:top;">Message:</td><td>${message}</td></tr>
-              </table>
+          <table style="width:100%;margin-top:20px;border-collapse:collapse;">
+            <tr><td style="font-weight:bold;padding:5px 0;width:80px;">Name:</td><td>${name}</td></tr>
+            <tr><td style="font-weight:bold;padding:5px 0;">Email:</td><td>${email}</td></tr>
+            <tr><td style="font-weight:bold;padding:5px 0;vertical-align:top;">Message:</td><td>${message}</td></tr>
+          </table>
 
-              <hr style="margin:25px 0;border:none;border-top:1px solid #eee;" />
+          <hr style="margin:30px 0;border:none;border-top:1px solid #eee;" />
 
-              <p style="font-size:13px;color:#777;">
-                Sent automatically from <a href="https://www.aifnn.com" style="color:#0045ff;text-decoration:none;">AifNN.com</a>
-              </p>
-            </td>
-          </tr>
-        </table>
-      </div>
-    `;
+          <p style="font-size:13px;color:#777;text-align:center;">
+            Sent automatically from 
+            <a href="https://www.aifnn.com" style="color:#0045ff;text-decoration:none;">AifNN.com</a>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td style="background-color:#001229;padding:15px;text-align:center;color:#aaa;font-size:12px;">
+          © ${new Date().getFullYear()} AifNN Technologies — AI | ML | Automation
+        </td>
+      </tr>
+    </table>
+  </div>
+`;
+
+
 
     // ✅ Send the branded HTML email
     await transporter.sendMail({
