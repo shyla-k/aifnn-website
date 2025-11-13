@@ -652,6 +652,7 @@ backgroundSize: "cover",
 
 <section id="contact" className="max-w-7xl mx-auto px-6 py-16">
   <div className="grid md:grid-cols-2 gap-10 items-center">
+    
     <div>
       <h3 className="text-2xl font-bold">Get in Touch</h3>
       <p className="mt-4 text-gray-300">
@@ -660,22 +661,19 @@ backgroundSize: "cover",
       <div className="mt-6 space-y-3 text-sm text-gray-400">
         <div>📞 +91 86605 06059</div>
         <div>
-          📧{" "}
-          <a
-            href="mailto:shyla.mk@aifnn.com"
-            className="underline text-blue-400"
-          >
-            shyla.mk@aifnn.com
-          </a>
+          📧 <a href="mailto:shyla.mk@aifnn.com" className="underline text-blue-400">
+              shyla.mk@aifnn.com
+              </a>
         </div>
         <div>🌐 www.aifnn.com</div>
       </div>
     </div>
 
-    {/* ✅ Formspree-integrated form */}
-    {/* ✅ Inline Contact Form with status message */}
-{/* CONTACT FORM FIXED ✅ */}
-<ContactForm />
+
+    <div className="mt-6">
+      <ContactForm />
+    </div>
+
   </div>
 </section>
 
