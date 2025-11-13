@@ -306,7 +306,7 @@ export default function ContactForm() {
           className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80] focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-<div className="flex justify-center mt-6">
+<div className="space-y-4 justify-center mt-6 w-full flex max-w-lg mx-auto w-full text-center">
       {/* Submit button - always visible, shape preserved */}
       <button
         type="submit"
