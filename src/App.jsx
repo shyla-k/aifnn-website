@@ -904,7 +904,8 @@ autoComplete="off"
     ${
       emailValid && !checkingDomain
         ? "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80] shadow-[inset_0_0_10px_rgba(0,115,255,0.25)] hover:shadow-[0_0_20px_rgba(0,115,255,0.5)] hover:scale-105 animate-pulse-glow"
-        : "bg-gradient-to-b from-gray-700 to-gray-800 border border-gray-600 opacity-70 cursor-not-allowed"
+        : "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80] shadow-[inset_0_0_10px_rgba(0,115,255,0.25)] hover:shadow-[0_0_20px_rgba(0,115,255,0.5)] hover:scale-105 animate-pulse-glow"
+
     }`}
 >
   {checkingDomain
@@ -913,7 +914,7 @@ autoComplete="off"
     ? "Sending..."
     : emailValid
     ? "Send Message"
-    : "Invalid email — cannot send"}
+    : "Send Message"}
 </button>
 
 
