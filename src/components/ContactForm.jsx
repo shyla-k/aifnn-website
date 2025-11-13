@@ -306,7 +306,7 @@ export default function ContactForm() {
           className="w-full p-2 rounded bg-gray-800 text-gray-200 border border-[#0045ff80] focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-
+<div className="flex justify-center mt-6">
       {/* Submit button - always visible, shape preserved */}
       <button
         type="submit"
@@ -322,7 +322,7 @@ export default function ContactForm() {
       >
         {status === "sending" ? "Sending..." : "Send Message"}
       </button>
-
+</div>
       {/* Feedback message */}
       <AnimatePresence>
         {status !== "idle" && (
