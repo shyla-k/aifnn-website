@@ -680,71 +680,24 @@ backgroundSize: "cover",
 
       {/* --- MODAL --- */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
-          <div className="bg-gray-900 rounded-xl shadow-lg p-8 max-w-md w-full relative">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-3 right-3 text-gray-400 hover:text-white"
-            >
-              ✕
-            </button>
+  <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
+    <div className="bg-gray-900 rounded-xl shadow-lg p-8 max-w-md w-full relative">
 
-            <h2 className="text-2xl font-bold text-white mb-4">Get Started with AifNN</h2>
-    <form
-  onChange={async (e) => {
-  const value = e.target.value.trim();
-  setFormData({ ...formData, email: value });
+      <button
+        onClick={() => setShowModal(false)}
+        className="absolute top-3 right-3 text-gray-400 hover:text-white"
+      >
+        ✕
+      </button>
 
-  const msgEl = document.getElementById("emailValidationMsg");
-  const suggestionEl = document.getElementById("emailSuggestionMsg");
+      <h2 className="text-2xl font-bold text-white mb-4">
+        Get Started with AifNN
+      </h2>
 
-  // 1️⃣ Basic format check
-  const basicEmail = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
-  if (!basicEmail.test(value)) {
-    msgEl.textContent = "❌ Please enter a valid email address.";
-    msgEl.className = "text-red-400 text-sm mt-1";
-    suggestionEl.textContent = "";
-    setEmailValid(false);
-    return;
-  }
-
-  // 2️⃣ Extract domain
-  const domain = value.split("@")[1]?.toLowerCase();
-  if (!domain) return;
-
-  // 3️⃣ Trusted email providers (auto pass)
-  const personalDomains = [
-    "gmail.com", "yahoo.com", "outlook.com", "hotmail.com",
-    "protonmail.com", "icloud.com", "rediffmail.com", "aol.com",
-  ];
-
-  // 4️⃣ Known company domains (auto pass)
-  const knownCompanyDomains = [
-    "aifnn.com", "tcs.com", "infosys.com", "wipro.com", "techmahindra.com",
-    "hcl.com", "accenture.com", "cognizant.com", "bosch.com",
-    "siemens.com", "deloitte.com", "ey.com", "kpmg.com", "pwc.com",
-    "microsoft.com", "google.com", "amazon.com", "intel.com",
-    "qualcomm.com", "honeywell.com", "ge.com", "capgemini.com",
-    "ibm.com", "oracle.com", "zoho.com", "adobe.com"
-  ];
-
-  // ✅ If in trusted personal or company domains — mark valid immediately
-  if (personalDomains.includes(domain) || knownCompanyDomains.includes(domain)) {
-    msgEl.textContent = `✅ Recognized domain: ${domain}`;
-    msgEl.className = "text-green-400 text-sm mt-1";
-    setEmailValid(true);
-    return;
-  }
-
-  // 5️⃣ Common typos and correction suggestion
-  const typoMap
-
-</form>
-
-
-          </div>
-        </div>
-      )}
+      <ContactForm />
+    </div>
+  </div>
+)}
 
 
 
