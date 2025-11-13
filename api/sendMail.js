@@ -39,27 +39,19 @@ export default async function handler(req, res) {
   const htmlContent = `
   <div style="background-color:#f4f7fb;padding:30px 0;font-family:'Segoe UI',Arial,sans-serif;">
     <table style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-      
-      <!-- HEADER -->
       <tr>
         <td style="background:linear-gradient(90deg,#052042,#001229);text-align:center;padding:25px 15px;">
-          <img 
-            src="https://www.aifnn.com/assets/AifNN_darkbluebackground1.png"
-            alt="AifNN Logo"
-            width="120"
-            height="120"
-            style="display:block;margin:0 auto;border-radius:8px;"
-          />
-          <h2 style="color:#ffffff;margin:15px 0 5px;font-size:22px;font-weight:600;">
-            AifNN Technologies
+          <!-- ✅ Fix: explicit image width/height for Outlook -->
+          <img src="https://www.aifnn.com/assets/AifNN_darkbluebackground1.png"
+               alt="AifNN Logo"
+               width="120"
+               height="120"
+               style="display:block;margin:0 auto;border-radius:8px;">
+          <h2 style="color:#ffffff;margin:15px 0 0;font-size:22px;font-weight:600;">
+            AifNN Contact Form Message
           </h2>
-          <p style="color:#69d3ff;font-size:14px;letter-spacing:2px;margin:0;">
-            AI · ML · Automation
-          </p>
         </td>
       </tr>
-
-      <!-- BODY -->
       <tr>
         <td style="padding:30px;color:#333;">
           <p style="font-size:16px;line-height:1.6;margin:0 0 10px;">
@@ -80,18 +72,14 @@ export default async function handler(req, res) {
           </p>
         </td>
       </tr>
-
-      <!-- FOOTER -->
       <tr>
         <td style="background-color:#001229;padding:15px;text-align:center;color:#aaa;font-size:12px;">
-          © ${new Date().getFullYear()} AifNN Technologies — Intelligent Automation Solutions
+          © ${new Date().getFullYear()} AifNN Technologies — AI | ML | Automation
         </td>
       </tr>
-
     </table>
   </div>
 `;
-
 
 
 
