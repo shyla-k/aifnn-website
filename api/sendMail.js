@@ -2,7 +2,7 @@
 import nodemailer from "nodemailer";
 
 export default async function handler(req, res) {
-  // Allow cross-origin requests
+  // Enable CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // ✅ Yahoo SMTP configuration
+    // ✅ Yahoo SMTP setup
     const transporter = nodemailer.createTransport({
       host: "smtp.mail.yahoo.com",
       port: 465,
@@ -35,36 +35,38 @@ export default async function handler(req, res) {
 
     await transporter.verify();
 
-    // ✅ Brand email design
+    // ✅ Inline-styled, Yahoo-safe HTML email
     const htmlContent = `
-      <div style="font-family: 'Segoe UI', Arial, sans-serif; background-color: #f5f7fa; padding: 30px;">
-        <table style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-          <tr style="background: linear-gradient(90deg, #052042, #001229);">
-            <td style="padding: 20px; text-align: center;">
-              <img src="https://www.aifnn.com/assets/AifNN_darkbluebackground1.png" alt="AifNN Logo" style="height: 60px; display: block; margin: 0 auto;" />
-              <h2 style="color: #ffffff; margin: 10px 0 0;">New Contact Message</h2>
+      <div style="background-color:#f4f7fb;padding:20px;font-family:'Segoe UI',Arial,sans-serif;">
+        <table style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+          <tr>
+            <td style="background:linear-gradient(90deg,#052042,#001229);text-align:center;padding:25px 15px;">
+              <img src="https://www.aifnn.com/assets/AifNN_darkbluebackground1.png" alt="AifNN Logo" style="height:70px;margin-bottom:10px;">
+              <h2 style="color:#ffffff;margin:0;font-size:22px;">New Message from AifNN</h2>
             </td>
           </tr>
           <tr>
-            <td style="padding: 30px;">
-              <p style="font-size: 16px; color: #333;">You’ve received a new message from the AifNN contact form:</p>
+            <td style="padding:25px;color:#333;">
+              <p style="font-size:16px;">You’ve received a new message from your website contact form:</p>
 
-              <table style="width: 100%; margin-top: 20px;">
-                <tr><td style="color: #555; font-weight: bold;">Name:</td><td>${name}</td></tr>
-                <tr><td style="color: #555; font-weight: bold;">Email:</td><td>${email}</td></tr>
-                <tr><td style="color: #555; font-weight: bold;">Message:</td><td>${message}</td></tr>
+              <table style="width:100%;margin-top:20px;border-collapse:collapse;">
+                <tr><td style="font-weight:bold;padding:5px 0;width:80px;">Name:</td><td>${name}</td></tr>
+                <tr><td style="font-weight:bold;padding:5px 0;">Email:</td><td>${email}</td></tr>
+                <tr><td style="font-weight:bold;padding:5px 0;vertical-align:top;">Message:</td><td>${message}</td></tr>
               </table>
 
-              <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;" />
+              <hr style="margin:25px 0;border:none;border-top:1px solid #eee;" />
 
-              <p style="font-size: 14px; color: #777;">This message was sent automatically from the <a href="https://www.aifnn.com" style="color: #0045ff; text-decoration: none;">AifNN.com</a> website.</p>
+              <p style="font-size:13px;color:#777;">
+                Sent automatically from <a href="https://www.aifnn.com" style="color:#0045ff;text-decoration:none;">AifNN.com</a>
+              </p>
             </td>
           </tr>
         </table>
       </div>
     `;
 
-    // ✅ Send styled email
+    // ✅ Send the branded HTML email
     await transporter.sendMail({
       from: `"${name}" <${process.env.SMTP_USER}>`,
       to: "Shyla.MK@aifnn.com",
@@ -72,9 +74,10 @@ export default async function handler(req, res) {
       replyTo: email,
       subject: `📩 New Contact Message from ${name}`,
       html: htmlContent,
+      headers: { "Content-Type": "text/html; charset=UTF-8" },
     });
 
-    console.log("✅ Branded email sent successfully");
+    console.log("✅ Branded AifNN email sent successfully");
     return res.status(200).json({
       success: true,
       message: "✅ Email sent successfully!",
