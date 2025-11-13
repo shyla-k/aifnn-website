@@ -680,24 +680,24 @@ backgroundSize: "cover",
 
       {/* --- MODAL --- */}
       {showModal && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
-    <div className="bg-gray-900 rounded-xl shadow-lg p-8 max-w-md w-full relative">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
+          <div className="bg-gray-900 rounded-xl shadow-lg p-8 max-w-md w-full relative">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-white"
+            >
+              ✕
+            </button>
 
-      <button
-        onClick={() => setShowModal(false)}
-        className="absolute top-3 right-3 text-gray-400 hover:text-white"
-      >
-        ✕
-      </button>
+            <h2 className="text-2xl font-bold text-white mb-4">Get Started with AifNN</h2>
+  
 
-      <h2 className="text-2xl font-bold text-white mb-4">
-        Get Started with AifNN
-      </h2>
 
-      <ContactForm />
-    </div>
-  </div>
-)}
+
+
+          </div>
+        </div>
+      )}
 
 
 
