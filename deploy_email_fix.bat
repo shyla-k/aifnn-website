@@ -1,49 +1,43 @@
 @echo off
-:: ==========================================
-:: 🚀 AifNN Auto-Deploy Script
-:: ==========================================
-echo.
-echo ==========================================
-echo   🚀 Deploying AifNN Website (Email Fix)
-echo ==========================================
-echo.
+echo ============================
+echo   Cleaning Project
+echo ============================
 
-:: 1️⃣ Move to your project directory
-cd /d "C:\Users\mkshy\ai-company-website"
+REM Delete node_modules
+echo Deleting node_modules...
+rmdir /s /q node_modules
 
-:: 2️⃣ Pull latest changes first (optional but safe)
-echo 🔄 Pulling latest from GitHub...
-git pull origin main
-echo.
+REM Delete dist folder
+echo Deleting dist folder...
+rmdir /s /q dist
 
-:: 3️⃣ Stage all changes
-echo 🌀 Staging project files...
+REM Delete Vite cache (if exists)
+echo Deleting Vite cache...
+rmdir /s /q .vite
+
+echo ============================
+echo   Reinstalling dependencies
+echo ============================
+npm install
+
+echo ============================
+echo   Building Project
+echo ============================
+npm run build
+
+echo ============================
+echo   Git Commit & Push
+echo ============================
 git add .
-echo.
-
-:: 4️⃣ Commit (only if there are changes)
-echo 📝 Checking for changes to commit...
-git diff --cached --quiet
-IF %ERRORLEVEL% EQU 0 (
-    echo ⚠️  No changes detected — skipping commit.
-) ELSE (
-    git commit -m "Update: Email validation + Modal Contact Form Integration"
-    echo ✅ Changes committed successfully!
-)
-echo.
-
-:: 5️⃣ Push to GitHub
-echo 📤 Pushing to GitHub (main branch)...
+git commit -m "Cleanup + fresh build + deploy"
 git push origin main
-echo.
 
-:: 6️⃣ Deploy to Vercel Production
-echo 🚀 Deploying to Vercel Production...
+echo ============================
+echo   Deploying to Vercel
+echo ============================
 vercel --prod --force
-echo.
 
-echo ==========================================
-echo   ✅ Deployment complete!
-echo   🌐 https://www.aifnn.com
-echo ==========================================
+echo ============================
+echo   DONE!
+echo ============================
 pause
