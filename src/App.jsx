@@ -936,7 +936,7 @@ autoComplete="off"
 
             <h2 className="text-2xl font-bold text-white mb-4">Get Started with AifNN</h2>
     <form
-onChange={async (e) => {
+  onChange={async (e) => {
   const value = e.target.value.trim();
   setFormData({ ...formData, email: value });
 
@@ -982,70 +982,7 @@ onChange={async (e) => {
   }
 
   // 5️⃣ Common typos and correction suggestion
-  const typoMap = {
-    "gnail.com": "gmail.com",
-    "gamil.com": "gmail.com",
-    "yahho.com": "yahoo.com",
-    "hotnail.com": "hotmail.com",
-    "outlok.com": "outlook.com",
-    "aifn.com": "aifnn.com",
-  };
-
-  if (typoMap[domain]) {
-    suggestionEl.innerHTML = `
-      <span class="text-yellow-400 text-sm mt-1">
-        ⚠️ Did you mean 
-        <button 
-          type="button"
-          class="underline text-blue-400 hover:text-blue-300 ml-1"
-          onclick="this.closest('form').querySelector('input[name=email]').value='${value.split('@')[0]}@${typoMap[domain]}';
-                   this.closest('form').querySelector('#emailValidationMsg').textContent='✅ Domain corrected to ${typoMap[domain]}';
-                   this.closest('form').querySelector('#emailValidationMsg').className='text-green-400 text-sm mt-1';
-                   this.closest('form').querySelector('#emailSuggestionMsg').textContent='';
-          "
-        >${typoMap[domain]}</button> ?
-      </span>
-    `;
-  } else {
-    suggestionEl.textContent = "";
-  }
-
-  // 6️⃣ MX record check for any company/custom domain
-  msgEl.textContent = "⏳ Checking email domain...";
-  msgEl.className = "text-blue-400 text-sm mt-1";
-  setCheckingDomain(true);
-  setEmailValid(false);
-
-  try {
-    const res = await fetch(`https://dns.google/resolve?name=${domain}&type=MX`);
-    const data = await res.json();
-
-    const hasValidMX =
-      data.Answer &&
-      Array.isArray(data.Answer) &&
-      data.Answer.some(
-        (ans) =>
-          ans.data &&
-          /mail|mx|google|yah|outlook|protection|smtp|microsoft|secure/i.test(ans.data)
-      );
-
-    if (hasValidMX) {
-      msgEl.textContent = `✅ Valid business domain (${domain})`;
-      msgEl.className = "text-green-400 text-sm mt-1";
-      setEmailValid(true);
-    } else {
-      msgEl.textContent = `❌ Invalid or inactive domain (${domain})`;
-      msgEl.className = "text-red-400 text-sm mt-1";
-      setEmailValid(false);
-    }
-  } catch (err) {
-    msgEl.textContent = "⚠️ Could not verify domain right now.";
-    msgEl.className = "text-yellow-400 text-sm mt-1";
-    setEmailValid(false);
-  } finally {
-    setCheckingDomain(false);
-  }
-}}
+  const typoMap
 
 </form>
 
