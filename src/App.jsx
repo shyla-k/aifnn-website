@@ -935,68 +935,120 @@ autoComplete="off"
             </button>
 
             <h2 className="text-2xl font-bold text-white mb-4">Get Started with AifNN</h2>
-            <form
-  onSubmit={async (e) => {
-    e.preventDefault();
-    const msgEl = document.getElementById("contactMessage");
+    <form
+onChange={async (e) => {
+  const value = e.target.value.trim();
+  setFormData({ ...formData, email: value });
 
-    // 🧠 Check email validity before sending
-    if (!emailValid) {
-      msgEl.style.display = "block";
-      msgEl.textContent = "❌ Invalid email — message not sent.";
-      msgEl.className = "text-red-400 text-center mt-4";
-      setTimeout(() => (msgEl.style.display = "none"), 4000);
-      return; // stop here — do not send
+  const msgEl = document.getElementById("emailValidationMsg");
+  const suggestionEl = document.getElementById("emailSuggestionMsg");
+
+  // 1️⃣ Basic format check
+  const basicEmail = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+  if (!basicEmail.test(value)) {
+    msgEl.textContent = "❌ Please enter a valid email address.";
+    msgEl.className = "text-red-400 text-sm mt-1";
+    suggestionEl.textContent = "";
+    setEmailValid(false);
+    return;
+  }
+
+  // 2️⃣ Extract domain
+  const domain = value.split("@")[1]?.toLowerCase();
+  if (!domain) return;
+
+  // 3️⃣ Trusted email providers (auto pass)
+  const personalDomains = [
+    "gmail.com", "yahoo.com", "outlook.com", "hotmail.com",
+    "protonmail.com", "icloud.com", "rediffmail.com", "aol.com",
+  ];
+
+  // 4️⃣ Known company domains (auto pass)
+  const knownCompanyDomains = [
+    "aifnn.com", "tcs.com", "infosys.com", "wipro.com", "techmahindra.com",
+    "hcl.com", "accenture.com", "cognizant.com", "bosch.com",
+    "siemens.com", "deloitte.com", "ey.com", "kpmg.com", "pwc.com",
+    "microsoft.com", "google.com", "amazon.com", "intel.com",
+    "qualcomm.com", "honeywell.com", "ge.com", "capgemini.com",
+    "ibm.com", "oracle.com", "zoho.com", "adobe.com"
+  ];
+
+  // ✅ If in trusted personal or company domains — mark valid immediately
+  if (personalDomains.includes(domain) || knownCompanyDomains.includes(domain)) {
+    msgEl.textContent = `✅ Recognized domain: ${domain}`;
+    msgEl.className = "text-green-400 text-sm mt-1";
+    setEmailValid(true);
+    return;
+  }
+
+  // 5️⃣ Common typos and correction suggestion
+  const typoMap = {
+    "gnail.com": "gmail.com",
+    "gamil.com": "gmail.com",
+    "yahho.com": "yahoo.com",
+    "hotnail.com": "hotmail.com",
+    "outlok.com": "outlook.com",
+    "aifn.com": "aifnn.com",
+  };
+
+  if (typoMap[domain]) {
+    suggestionEl.innerHTML = `
+      <span class="text-yellow-400 text-sm mt-1">
+        ⚠️ Did you mean 
+        <button 
+          type="button"
+          class="underline text-blue-400 hover:text-blue-300 ml-1"
+          onclick="this.closest('form').querySelector('input[name=email]').value='${value.split('@')[0]}@${typoMap[domain]}';
+                   this.closest('form').querySelector('#emailValidationMsg').textContent='✅ Domain corrected to ${typoMap[domain]}';
+                   this.closest('form').querySelector('#emailValidationMsg').className='text-green-400 text-sm mt-1';
+                   this.closest('form').querySelector('#emailSuggestionMsg').textContent='';
+          "
+        >${typoMap[domain]}</button> ?
+      </span>
+    `;
+  } else {
+    suggestionEl.textContent = "";
+  }
+
+  // 6️⃣ MX record check for any company/custom domain
+  msgEl.textContent = "⏳ Checking email domain...";
+  msgEl.className = "text-blue-400 text-sm mt-1";
+  setCheckingDomain(true);
+  setEmailValid(false);
+
+  try {
+    const res = await fetch(`https://dns.google/resolve?name=${domain}&type=MX`);
+    const data = await res.json();
+
+    const hasValidMX =
+      data.Answer &&
+      Array.isArray(data.Answer) &&
+      data.Answer.some(
+        (ans) =>
+          ans.data &&
+          /mail|mx|google|yah|outlook|protection|smtp|microsoft|secure/i.test(ans.data)
+      );
+
+    if (hasValidMX) {
+      msgEl.textContent = `✅ Valid business domain (${domain})`;
+      msgEl.className = "text-green-400 text-sm mt-1";
+      setEmailValid(true);
+    } else {
+      msgEl.textContent = `❌ Invalid or inactive domain (${domain})`;
+      msgEl.className = "text-red-400 text-sm mt-1";
+      setEmailValid(false);
     }
+  } catch (err) {
+    msgEl.textContent = "⚠️ Could not verify domain right now.";
+    msgEl.className = "text-yellow-400 text-sm mt-1";
+    setEmailValid(false);
+  } finally {
+    setCheckingDomain(false);
+  }
+}}
 
-    setLoading(true);
-    msgEl.style.display = "block";
-    msgEl.textContent = "⏳ Sending your message...";
-    msgEl.className = "text-blue-400 text-center mt-4";
-
-    try {
-      const res = await fetch(`${apiUrl}/api/sendMail`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        msgEl.textContent = "✅ Thank you! Your message has been sent.";
-        msgEl.className = "text-green-400 text-center mt-4";
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        msgEl.textContent = "❌ Something went wrong. Please try again.";
-        msgEl.className = "text-red-400 text-center mt-4";
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      msgEl.textContent = "❌ Network error. Please try again later.";
-      msgEl.className = "text-red-400 text-center mt-4";
-    } finally {
-      setLoading(false);
-    }
-
-    setTimeout(() => (msgEl.style.display = "none"), 6000);
-  }}
-  className="space-y-4 bg-gray-900 p-6 rounded-xl shadow-lg border border-[#0045ff80]"
->
-  {/* Name, Email, Message fields above here ... */}
-
-  {/* ✅ Always active Send Message Button */}
-  <button
-    type="submit"
-    className="mt-6 w-auto px-6 py-2.5 rounded-md font-medium text-sm text-white transition-all duration-300
-      bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80]
-      shadow-[inset_0_0_8px_rgba(0,115,255,0.25)] hover:shadow-[0_0_12px_rgba(0,115,255,0.4)] hover:scale-105 animate-pulse-glow"
-  >
-    {loading ? "Sending..." : "Send Message"}
-  </button>
-
-  <p id="contactMessage" className="hidden text-center mt-4"></p>
 </form>
+
 
           </div>
         </div>
