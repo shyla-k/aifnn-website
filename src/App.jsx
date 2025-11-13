@@ -899,17 +899,21 @@ autoComplete="off"
   {/* Submit Button */}
 <button
   type="submit"
-  disabled={!emailValid || checkingDomain || loading}
-  className={`mt-6 px-8 py-3 rounded-md font-semibold transition-all duration-300
-    ${emailValid && !checkingDomain
-      ? "bg-blue-600 hover:scale-105"
-      : "bg-gray-600 cursor-not-allowed opacity-50"}`}
+  disabled={checkingDomain || loading}
+  className={`mt-6 w-full px-8 py-3 rounded-md font-semibold text-white transition-all duration-300
+    ${
+      emailValid && !checkingDomain
+        ? "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80] shadow-[inset_0_0_10px_rgba(0,115,255,0.25)] hover:shadow-[0_0_20px_rgba(0,115,255,0.5)] hover:scale-105 animate-pulse-glow"
+        : "bg-gradient-to-b from-gray-700 to-gray-800 border border-gray-600 opacity-70 cursor-not-allowed"
+    }`}
 >
   {checkingDomain
     ? "Checking..."
     : loading
     ? "Sending..."
-    : "Send Message"}
+    : emailValid
+    ? "Send Message"
+    : "Invalid email — cannot send"}
 </button>
 
 
@@ -932,38 +936,68 @@ autoComplete="off"
 
             <h2 className="text-2xl font-bold text-white mb-4">Get Started with AifNN</h2>
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Form submitted!");
-                setShowModal(false);
-              }}
-              className="space-y-4"
-            >
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <textarea
-                rows={4}
-                placeholder="Tell us about your project..."
-                className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <button
-                type="submit"
-                className="w-full px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium hover:opacity-90 transition"
-              >
-                Submit
-              </button>
-            </form>
+  onSubmit={async (e) => {
+    e.preventDefault();
+    const msgEl = document.getElementById("contactMessage");
+
+    // 🧠 Check email validity before sending
+    if (!emailValid) {
+      msgEl.style.display = "block";
+      msgEl.textContent = "❌ Invalid email — message not sent.";
+      msgEl.className = "text-red-400 text-center mt-4";
+      setTimeout(() => (msgEl.style.display = "none"), 4000);
+      return; // stop here — do not send
+    }
+
+    setLoading(true);
+    msgEl.style.display = "block";
+    msgEl.textContent = "⏳ Sending your message...";
+    msgEl.className = "text-blue-400 text-center mt-4";
+
+    try {
+      const res = await fetch(`${apiUrl}/api/sendMail`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        msgEl.textContent = "✅ Thank you! Your message has been sent.";
+        msgEl.className = "text-green-400 text-center mt-4";
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        msgEl.textContent = "❌ Something went wrong. Please try again.";
+        msgEl.className = "text-red-400 text-center mt-4";
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      msgEl.textContent = "❌ Network error. Please try again later.";
+      msgEl.className = "text-red-400 text-center mt-4";
+    } finally {
+      setLoading(false);
+    }
+
+    setTimeout(() => (msgEl.style.display = "none"), 6000);
+  }}
+  className="space-y-4 bg-gray-900 p-6 rounded-xl shadow-lg border border-[#0045ff80]"
+>
+  {/* Name, Email, Message fields above here ... */}
+
+  {/* ✅ Always active Send Message Button */}
+  <button
+    type="submit"
+    className="mt-6 w-auto px-6 py-2.5 rounded-md font-medium text-sm text-white transition-all duration-300
+      bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80]
+      shadow-[inset_0_0_8px_rgba(0,115,255,0.25)] hover:shadow-[0_0_12px_rgba(0,115,255,0.4)] hover:scale-105 animate-pulse-glow"
+  >
+    {loading ? "Sending..." : "Send Message"}
+  </button>
+
+  <p id="contactMessage" className="hidden text-center mt-4"></p>
+</form>
+
           </div>
         </div>
       )}
