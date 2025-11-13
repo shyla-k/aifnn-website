@@ -677,18 +677,21 @@ backgroundSize: "cover",
 {/* CONTACT FORM FIXED ✅ */}
 <form
   onSubmit={async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const msgEl = document.getElementById("contactMessage");
-    msgEl.style.display = "block";
+  const msgEl = document.getElementById("contactMessage");
+  msgEl.style.display = "block";
 
-    // ⚠️ Stop here if invalid email
-    if (!emailValid) {
-      msgEl.textContent = "❌ Invalid email. Message not sent.";
-      msgEl.className = "text-red-400 text-center mt-4";
-      setTimeout(() => (msgEl.style.display = "none"), 4000);
-      return;
-    }
+  // ⚠️ Stop here if invalid email
+  if (!emailValid) {
+    msgEl.textContent = "❌ Invalid email. Message not sent.";
+    msgEl.className = "text-red-400 text-center mt-4";
+    setTimeout(() => (msgEl.style.display = "none"), 4000);
+    return;
+  }
+
+  // otherwise continue sending...
+
 
     // Otherwise, send normally
     setLoading(true);
@@ -911,23 +914,16 @@ autoComplete="off"
 <button
   type="submit"
   disabled={checkingDomain || loading}
-  className={`mt-6 w-full px-8 py-3 rounded-md font-semibold text-white transition-all duration-300
-    ${
-      emailValid && !checkingDomain
-        ? "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80] shadow-[inset_0_0_10px_rgba(0,115,255,0.25)] hover:shadow-[0_0_20px_rgba(0,115,255,0.5)] hover:scale-105 animate-pulse-glow"
-        : "bg-gradient-to-b from-[#052042] to-[#001229] border border-[#0045ff80] shadow-[inset_0_0_10px_rgba(0,115,255,0.25)] hover:shadow-[0_0_20px_rgba(0,115,255,0.5)] hover:scale-105 animate-pulse-glow"
-
-    }`}
+  className="mt-6 w-full px-8 py-3 rounded-md font-semibold text-white transition-all duration-300
+    bg-gradient-to-b from-[#052042] to-[#001229] 
+    border border-[#0045ff80] 
+    shadow-[inset_0_0_10px_rgba(0,115,255,0.25)]
+    hover:shadow-[0_0_20px_rgba(0,115,255,0.5)]
+    hover:scale-105
+    animate-pulse-glow"
 >
-  {checkingDomain
-    ? "Checking..."
-    : loading
-    ? "Sending..."
-    : emailValid
-    ? "Send Message"
-    : "Send Message"}
+  {loading ? "Sending..." : "Send Message"}
 </button>
-
 
   <p id="contactMessage" className="hidden text-center mt-4"></p>
 </form>
