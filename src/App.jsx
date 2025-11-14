@@ -8,6 +8,12 @@ import CaseStudies from "./components/CaseStudies";
 import ThankYou from "./pages/ThankYou"; // adjust path if needed
 import { Brain, Layers, Bot, Cpu } from "lucide-react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsConditions from "./pages/TermsConditions";
+import SecurityPolicy from "./pages/SecurityPolicy";
+import CookiePolicy from "./pages/CookiePolicy";
+import Disclaimer from "./pages/Disclaimer";
+
 
 
 
@@ -29,7 +35,15 @@ import Button from "./components/Button";
 // Uses TailwindCSS + framer-motion
 
 
-
+<Routes>
+  <Route path="/" element={<AICompanyWebsite />} />
+  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+  <Route path="/terms-and-conditions" element={<TermsConditions />} />
+  <Route path="/security" element={<SecurityPolicy />} />
+  <Route path="/cookies" element={<CookiePolicy />} />
+  <Route path="/disclaimer" element={<Disclaimer />} />
+  <Route path="/thank-you" element={<ThankYou />} />
+</Routes>
 
 function AICompanyWebsite() {
  const [menuOpen, setMenuOpen] = useState(false);
@@ -177,7 +191,6 @@ backgroundSize: "cover",
 </section>
 
 
-{/* ABOUT US */}
 {/* ABOUT US */}
 <section 
   id="about" 
@@ -703,16 +716,26 @@ backgroundSize: "cover",
 
 
 
-      {/* FOOTER */}
-      <footer className="bg-black border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between text-sm text-gray-500">
-          <div>© {new Date().getFullYear()} AifNN — All rights reserved</div>
-          <div className="flex gap-4 mt-4 md:mt-0">
-            <a href="#" className="hover:text-gray-300">Privacy</a>
-            <a href="#" className="hover:text-gray-300">Terms</a>
-          </div>
-        </div>
-      </footer>
+   {/* LEGAL FOOTER */}
+<footer className="bg-[#000914] border-t border-gray-800 mt-12">
+  <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between text-sm text-gray-400 gap-4">
+
+    {/* Left side */}
+    <div>
+      © {new Date().getFullYear()} AifNN — All rights reserved.
+    </div>
+
+    {/* Right side: legal links */}
+    <div className="flex flex-wrap gap-6 text-gray-400">
+      <a href="/privacy-policy" className="hover:text-white transition">Privacy Policy</a>
+      <a href="/terms-and-conditions" className="hover:text-white transition">Terms & Conditions</a>
+      <a href="/security" className="hover:text-white transition">Security</a>
+      <a href="/cookies" className="hover:text-white transition">Cookie Policy</a>
+    </div>
+
+  </div>
+</footer>
+
     </div>
   );
 }
