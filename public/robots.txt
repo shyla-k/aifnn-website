@@ -1,3 +1,9 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+# Prevent indexing of dev or temporary pages
+Disallow: /tmp/
+Disallow: /test/
+Disallow: /dev/
+
+Sitemap: https://www.aifnn.com/sitemap.xml
