@@ -1,59 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- Home -->
   <url>
     <loc>https://www.aifnn.com/</loc>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
 
-  <!-- Sections -->
+  <!-- Legal Pages -->
   <url>
-    <loc>https://www.aifnn.com/#about</loc>
+    <loc>https://www.aifnn.com/privacy-policy</loc>
     <priority>0.9</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>yearly</changefreq>
   </url>
 
   <url>
-    <loc>https://www.aifnn.com/#services</loc>
+    <loc>https://www.aifnn.com/terms-and-conditions</loc>
     <priority>0.9</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>yearly</changefreq>
   </url>
 
   <url>
-    <loc>https://www.aifnn.com/#industries</loc>
+    <loc>https://www.aifnn.com/security</loc>
+    <priority>0.9</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://www.aifnn.com/cookies</loc>
     <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>yearly</changefreq>
   </url>
 
   <url>
-    <loc>https://www.aifnn.com/#case-studies</loc>
+    <loc>https://www.aifnn.com/disclaimer</loc>
     <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>yearly</changefreq>
   </url>
 
   <url>
-    <loc>https://www.aifnn.com/#Smart-Solutions</loc>
-    <priority>0.7</priority>
+    <loc>https://www.aifnn.com/thank-you</loc>
+    <priority>0.5</priority>
     <changefreq>monthly</changefreq>
-  </url>
-
-  <url>
-    <loc>https://www.aifnn.com/#staffing</loc>
-    <priority>0.7</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-
-  <url>
-    <loc>https://www.aifnn.com/#ilearn</loc>
-    <priority>0.6</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-
-  <url>
-    <loc>https://www.aifnn.com/#contact</loc>
-    <priority>0.8</priority>
-    <changefreq>weekly</changefreq>
   </url>
 
 </urlset>

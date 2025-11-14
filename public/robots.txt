@@ -1,9 +1,11 @@
 User-agent: *
 Allow: /
 
-# Prevent indexing of dev or temporary pages
-Disallow: /tmp/
-Disallow: /test/
-Disallow: /dev/
+# Prevent indexing of development or build folders (if any)
+Disallow: /api/
+Disallow: /node_modules/
+Disallow: /dist/
 
+# Sitemap Location
 Sitemap: https://www.aifnn.com/sitemap.xml
+

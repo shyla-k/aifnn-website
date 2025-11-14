@@ -716,36 +716,40 @@ backgroundSize: "cover",
 
 
 
-   {/* LEGAL FOOTER */}
-<footer className="bg-[#000914] border-t border-gray-800 mt-12">
-  <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between text-sm text-gray-400 gap-4">
+  {/* ----------------------- LEGAL FOOTER ----------------------- */}
+      <footer className="bg-[#000914] border-t border-gray-800 mt-12">
+        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between text-sm text-gray-400">
 
-    {/* Left side */}
-    <div>
-      © {new Date().getFullYear()} AifNN — All rights reserved.
-    </div>
+          <div>© {new Date().getFullYear()} AifNN — All rights reserved.</div>
 
-    {/* Right side: legal links */}
-    <div className="flex flex-wrap gap-6 text-gray-400">
-      <a href="/privacy-policy" className="hover:text-white transition">Privacy Policy</a>
-      <a href="/terms-and-conditions" className="hover:text-white transition">Terms & Conditions</a>
-      <a href="/security" className="hover:text-white transition">Security</a>
-      <a href="/cookies" className="hover:text-white transition">Cookie Policy</a>
-    </div>
-
-  </div>
-</footer>
-
+          <div className="flex flex-wrap gap-6">
+            <a href="/privacy-policy" className="hover:text-white">Privacy Policy</a>
+            <a href="/terms-and-conditions" className="hover:text-white">Terms & Conditions</a>
+            <a href="/security" className="hover:text-white">Security</a>
+            <a href="/cookies" className="hover:text-white">Cookie Policy</a>
+            <a href="/disclaimer" className="hover:text-white">Disclaimer</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
-// ✅ Final export with router integration
+
+// ----------------------- APP ROUTER -----------------------
 export default function App() {
   return (
     <Router>
       <Routes>
-        {/* Main site */}
+
+        {/* Main Website */}
         <Route path="/" element={<AICompanyWebsite />} />
+
+        {/* Legal Pages */}
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermsConditions />} />
+        <Route path="/security" element={<SecurityPolicy />} />
+        <Route path="/cookies" element={<CookiePolicy />} />
+        <Route path="/disclaimer" element={<Disclaimer />} />
 
         {/* Thank You Page */}
         <Route path="/thank-you" element={<ThankYou />} />
