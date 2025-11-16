@@ -13,6 +13,9 @@ import TermsConditions from "./pages/TermsConditions";
 import SecurityPolicy from "./pages/SecurityPolicy";
 import CookiePolicy from "./pages/CookiePolicy";
 import Disclaimer from "./pages/Disclaimer";
+import CookieBanner from "./components/CookieBanner";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer"; // (You already created this earlier)
 
 
 
@@ -35,16 +38,6 @@ import Button from "./components/Button";
 // Uses TailwindCSS + framer-motion
 
 
-<Routes>
-  <Route path="/" element={<AICompanyWebsite />} />
-  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-  <Route path="/terms-and-conditions" element={<TermsConditions />} />
-  <Route path="/security" element={<SecurityPolicy />} />
-  <Route path="/cookies" element={<CookiePolicy />} />
-  <Route path="/disclaimer" element={<Disclaimer />} />
-  <Route path="/thank-you" element={<ThankYou />} />
-</Routes>
-
 function AICompanyWebsite() {
  const [menuOpen, setMenuOpen] = useState(false);
 const [showModal, setShowModal] = useState(false);
@@ -59,24 +52,24 @@ const apiUrl =
     ? "http://localhost:3000"
     : "https://www.aifnn.com";
   return (
-    <div className="pt-20 min-h-screen  bg-gradient-to-br from-[#0A2342] via-[#0E1E3F] to-black text-white antialiased">
+    <div className="pt-20 min-h-screen  bg-gradient-to-br from-[#0A2342] via-[#0E1E3F] to-black text-white antialiased relative overflow-hidden">
 
       {/* NAV */}
-      <nav className="fixed top-0 left-0 w-full z-50 shadow-lg backdrop-blur-md
+      {/*<nav className="fixed top-0 left-0 w-full z-50 shadow-lg backdrop-blur-md
              bg-gradient-to-r from-[#031136] via-[#041b4d] to-[#072866]
              border-b border-blue-500/30
              transition-all duration-500">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">*/}
         {/* Logo + Tagline */}
-        <div className="flex items-center gap-3">
+       {/*} <div className="flex items-center gap-3">
           <img src="/AifNN_darkbluebackground1.png" alt="AifNN Logo" className="h-10 w-auto" />
           <span className="text-sm font-medium text-gray-300">
             AI • ML • Automation • Digitization • Engineering
           </span>
-        </div>
+        </div>*/}
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex gap-4 text-white font-medium">
+      {/*}  <div className="hidden md:flex gap-4 text-white font-medium">
           <a href="#about" className="hover:text-cyan-400">About</a>
           <a href="#services" className="hover:text-cyan-400">Services</a>
           <a href="#industries" className="hover:text-cyan-400">Industries</a>
@@ -84,38 +77,38 @@ const apiUrl =
  <a href="#Smart-Solutions" className="hover:text-cyan-400">Smart Solutions</a> 
 
           
- <a href="#staffing" className="hover:text-cyan-400">Staffing Solutions</a>
+ <a href="#staffing" className="hover:text-cyan-400">Staffing Solutions</a>*/}
   {/* iLearn with image */}
-<a href="#ilearn" className="flex items-center gap-1 hover:text-cyan-400">
+{/*<a href="#ilearn" className="flex items-center gap-1 hover:text-cyan-400">
   <img src={iLearnLogo} alt="iLearn" className="h-6 w-auto" />
   </a>
 <a href="#contact" className="hover:text-cyan-400">Contact</a>
-        </div>
+        </div>*/}
 
         {/* Mobile Menu Button */}
-        <button
+       {/*} <button
           className="md:hidden text-white text-2xl"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <FaTimes /> : <FaBars />}
         </button>
-      </div>
+      </div>*/}
 
       {/* Mobile Dropdown */}
-{menuOpen && (
+{/*menuOpen && (
   <div className="md:hidden bg-gray-900/95 px-6 py-4 space-y-4 text-white font-medium">
     <a href="#about" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>About</a>
     <a href="#services" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Services</a>
     <a href="#industries" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Industries</a>
-    <a href="#staffing" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Staffing</a> {/* ✅ Added */}
-    <a href="#case-studies" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Case Studies</a>
+    <a href="#staffing" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Staffing</a>*/} {/* ✅ Added */}
+   {/*} <a href="#case-studies" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Case Studies</a>
  <a href="#Smart-Solutions" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Smart Solutions</a>
 
 
     <a href="#contact" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Contact</a>
   </div>
 )}
-    </nav>
+    </nav> */}
 
      {/* HERO SECTION */}
 <section 
@@ -133,13 +126,11 @@ const apiUrl =
   {/* Hero Content */}
 
  <div
-        className=" min-h-screen absolute inset-0 bg-no-repeat bg-cover bg-fixed bg-center text-white opacity-0.3"
+        className="absolute inset-0 bg-cover bg-center text-white opacity-0.3"
         style={{ 
 backgroundImage: "url('/background2.png')" ,
-backgroundAttachment: "fixed",
-backgroundSize: "cover",
-    backgroundPosition: "center",
-    opacity: 1, // adjust 0.2–0.5 for visibility balance
+       opacity: 0.3, // adjust 0.2–0.5 for visibility balance
+       zIndex: 0,
 }}
       />
 <div
@@ -637,7 +628,7 @@ backgroundSize: "cover",
 </section>
 
 
-      {/* TEAM */}
+      {/*TEAM*/ }
      {/* <section id="team" className="max-w-7xl mx-auto px-6 py-16 bg-gradient-to-r from-gray-950 to-gray-900 rounded-t-3xl">
         <h3 className="text-2xl font-bold text-center">Leadership</h3>
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -712,39 +703,22 @@ backgroundSize: "cover",
         </div>
       )}
 
-
-
-
-
-  {/* ----------------------- LEGAL FOOTER ----------------------- */}
-      <footer className="bg-[#000914] border-t border-gray-800 mt-12">
-        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between text-sm text-gray-400">
-
-          <div>© {new Date().getFullYear()} AifNN — All rights reserved.</div>
-
-          <div className="flex flex-wrap gap-6">
-            <a href="/privacy-policy" className="hover:text-white">Privacy Policy</a>
-            <a href="/terms-and-conditions" className="hover:text-white">Terms & Conditions</a>
-            <a href="/security" className="hover:text-white">Security</a>
-            <a href="/cookies" className="hover:text-white">Cookie Policy</a>
-            <a href="/disclaimer" className="hover:text-white">Disclaimer</a>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
 
 // ----------------------- APP ROUTER -----------------------
+// ✅ Final export with router integration
 export default function App() {
   return (
     <Router>
+       <Navbar />        {/* 🔥 Navbar now appears on ALL pages */}
+       <CookieBanner />   {/* ✅ Cookie Banner Appears on All Pages */}
       <Routes>
-
-        {/* Main Website */}
+        {/* Main site */}
         <Route path="/" element={<AICompanyWebsite />} />
 
-        {/* Legal Pages */}
+        {/* Legal pages */}
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsConditions />} />
         <Route path="/security" element={<SecurityPolicy />} />
@@ -754,6 +728,8 @@ export default function App() {
         {/* Thank You Page */}
         <Route path="/thank-you" element={<ThankYou />} />
       </Routes>
+         {/* GLOBAL FOOTER */}
+      <Footer />
     </Router>
   );
 }

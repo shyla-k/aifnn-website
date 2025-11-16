@@ -1,5 +1,6 @@
 // src/pages/Disclaimer.jsx
 import React, { useEffect } from "react";
+import Layout from "../components/Layout";
 
 export default function Disclaimer() {
   useEffect(() => {
@@ -16,6 +17,7 @@ export default function Disclaimer() {
   }, []);
 
   return (
+     <Layout>
     <div className="min-h-screen bg-[#020617] text-white py-16 px-6">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-blue-400">Disclaimer</h1>
@@ -35,5 +37,6 @@ export default function Disclaimer() {
         </p>
       </div>
     </div>
+     </Layout>
   );
 }
