@@ -53,7 +53,7 @@ export default function PolicyLayout({ title, children }) {
             border border-blue-700/20 
             p-5 rounded-xl 
             h-fit 
-            top-28 
+            top-40 
             sticky 
             backdrop-blur-xl shadow-lg
           "
@@ -75,10 +75,10 @@ export default function PolicyLayout({ title, children }) {
               </a>
             ))}
           </nav>
-
+{/*
           <div className="mt-6 text-xs text-gray-400 border-t border-blue-800/30 pt-3">
             Last Updated: <span className="text-gray-300">{lastUpdated}</span>
-          </div>
+          </div>*/}
         </aside>
 
         {/* ---------------- Main Content ---------------- */}
