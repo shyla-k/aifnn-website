@@ -48,11 +48,23 @@ export default function HealthcareSolutions() {
 
       {/* Header */}
       <div className="max-w-7xl mx-auto text-center">
-        <motion.h2 className="text-4xl font-bold mb-4">
+        <motion.h2
+          className="text-4xl font-bold mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
           Smart AI Solutions in Healthcare
         </motion.h2>
-        <motion.p className="text-lg text-gray-300 max-w-3xl mx-auto mb-12">
-          AIFNN enhances medical care with AI-assisted diagnostics, automation, and intelligent patient monitoring.
+
+        <motion.p
+          className="text-lg text-gray-300 max-w-3xl mx-auto mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          AIFNN enhances medical care with AI-assisted diagnostics,
+          automation, and intelligent patient monitoring.
         </motion.p>
       </div>
 
@@ -63,6 +75,7 @@ export default function HealthcareSolutions() {
             key={index}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             className="bg-[#0A2E52] p-6 rounded-2xl border border-[#123a63]"
           >
             <item.icon className="w-12 h-12 text-[#4CC9F0] mb-4" />
@@ -74,16 +87,26 @@ export default function HealthcareSolutions() {
 
       {/* Diagram */}
       <div className="max-w-5xl mx-auto mt-20">
-        <motion.h3 className="text-3xl font-bold text-center mb-6">
+        <motion.h3
+          className="text-3xl font-bold text-center mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
           Healthcare AI System Diagram
         </motion.h3>
 
         <motion.img
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           src="/assets/healthcare_ai.png"
-          className="rounded-2xl shadow-2xl w-full blur-sm"
+          alt="Healthcare AI System Diagram"
+          className="rounded-2xl shadow-2xl w-full blur-sm transition-all duration-700"
           onLoad={(e) => e.currentTarget.classList.remove("blur-sm")}
         />
       </div>
+
     </div>
   );
 }

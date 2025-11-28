@@ -22,6 +22,10 @@ import Automotive from "./pages/Automotive";
 import Manufacturing from "./pages/Manufacturing";
 import Healthcare from "./pages/Healthcare";
 import Retail from "./pages/Retail";
+import CorporateTraining from "./pages/CorporateTraining";
+import ExperiencedProfessionals from "./pages/ExperiencedProfessionals";
+
+
 
 
 
@@ -50,6 +54,125 @@ import Retail from "./pages/Retail";
   const [loading, setLoading] = useState(false);
   const [emailValid, setEmailValid] = useState(false);
   const [checkingDomain, setCheckingDomain] = useState(false);
+// Staffing Modal States
+const [selectedStaffing, setSelectedStaffing] = useState(null);
+const [staffingModalOpen, setStaffingModalOpen] = useState(false);
+// Talent Request Form Modal State
+const [talentFormOpen, setTalentFormOpen] = useState(false);
+// Talent request modal open/close
+
+// Shared form data (persists between modals)
+const [talentForm, setTalentForm] = useState({
+  name: "",
+  email: "",
+  roles: "",
+  experience: "",
+  brief: ""
+});
+
+// Success popup
+const [successOpen, setSuccessOpen] = useState(false);
+
+
+// Staffing Details for Modal
+const staffingDetails = {
+  "AI & Data Experts": {
+    title: "AI & Data Experts",
+    overview:
+      "Our AI & Data Experts bring advanced capabilities in machine learning, data science, deep learning, and real-time analytical systems.",
+    capabilities: [
+      "ML, NLP, and Computer Vision model development",
+      "Predictive analytics & forecasting",
+      "End-to-end MLOps deployment",
+      "Data engineering & ETL pipelines",
+      "Model performance optimization",
+      "Real-time analytics dashboards",
+    ],
+    example:
+      "Retail Client: Built a recommendation engine increasing cross-sell revenue by 22%.",
+  },
+
+  "Engineering Staffing": {
+    title: "Engineering Staffing",
+    overview:
+      "We provide end-to-end engineering talent, including software, embedded, DevOps, and QA specialists for scalable digital systems.",
+    capabilities: [
+      "Embedded systems & firmware",
+      "Full-stack & backend development",
+      "QA automation frameworks",
+      "DevOps CI/CD pipelines",
+      "Microservices & API development",
+      "System architecture & documentation",
+    ],
+    example:
+      "Automotive Client: Delivered ADAS embedded modules, reducing software defects by 30%.",
+  },
+
+  "Digital Transformation Staffing": {
+    title: "Digital Transformation Staffing",
+    overview:
+      "Accelerate modernization with cloud, cybersecurity, automation, IoT, and enterprise transformation experts.",
+    capabilities: [
+      "Cloud migration (AWS/Azure/GCP)",
+      "Cybersecurity implementation",
+      "RPA automation and workflow design",
+      "Enterprise IoT integrations",
+      "Data governance & compliance",
+      "Infrastructure automation",
+    ],
+    example:
+      "Banking Client: Automated KYC workflows reducing processing time by 60%.",
+  },
+
+  "Custom Dedicated Teams": {
+    title: "Custom Dedicated Teams",
+    overview:
+      "Build high-performance technical teams aligned with your roadmap, sprint cycles, and delivery goals.",
+    capabilities: [
+      "AI pods & engineering squads",
+      "End-to-end product delivery",
+      "Research & innovation teams",
+      "Rapid prototype → MVP → production",
+      "Cross-functional team composition",
+      "Continuous scaling & maintenance",
+    ],
+    example:
+      "Agritech Client: Delivered a 12-member AI team building a farm analytics platform.",
+  },
+
+  "Flexible Staffing Models": {
+    title: "Flexible Staffing Models",
+    overview:
+      "Choose staffing models tailored to your timeline and delivery requirements.",
+    capabilities: [
+      "Full-time or part-time engineers",
+      "Contract-to-hire staffing",
+      "Long-term team extension",
+      "Rapid consultant deployment",
+      "Multi-location hybrid teams",
+      "Fully managed staffing programs",
+    ],
+    example:
+      "Enterprise Client: Combined full-time ML engineers with short-term cloud specialists.",
+  },
+
+  "On-Demand Support": {
+    title: "On-Demand Support",
+    overview:
+      "Deploy expert engineers within 24–72 hours for urgent delivery, production issues, or rapid PoC execution.",
+    capabilities: [
+      "Emergency engineering support",
+      "Production bug resolution",
+      "Rapid PoC/MVP execution",
+      "UI/UX & FE/BE integrations",
+      "Temporary tech leadership",
+      "Quick augmentation of skill gaps",
+    ],
+    example:
+      "Automotive Client: Delivered ADAS debugging engineers within 48 hours for a critical OEM deadline.",
+  },
+};
+
 
 
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -58,16 +181,78 @@ import Retail from "./pages/Retail";
       ? "http://localhost:3000"
       : "https://www.aifnn.com";
 
+// =============================
+// Talent Request Submit Handler
+// =============================
+const [formSubmitting, setFormSubmitting] = useState(false);
+
+const submitTalentForm = async () => {
+  if (!talentForm.name || !talentForm.email || !talentForm.roles) {
+    alert("Please fill Name, Email and Role(s) needed.");
+    return;
+  }
+
+  try {
+    setFormSubmitting(true);
+
+    const payload = {
+      ...talentForm,
+      source: selectedStaffing?.title || "Staffing modal",
+      timestamp: new Date().toISOString(),
+    };
+
+    const res = await fetch(`${apiUrl}/api/talent-request`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const json = await res.json();
+
+    if (res.ok && json.ok) {
+      setTalentFormOpen(false);
+      setSuccessOpen(true);
+
+      // Reset form
+      setTalentForm({
+        name: "",
+        email: "",
+        roles: "",
+        experience: "",
+        brief: "",
+      });
+    } else {
+      alert(json?.error || "Submission failed. Please try again.");
+    }
+  } catch (err) {
+    console.error("Error submitting form:", err);
+    alert("Network or server error.");
+  } finally {
+    setFormSubmitting(false);
+  }
+};
 
 
   useEffect(() => {
-    if (window.location.hash === "#contact") {
-      setTimeout(() => {
-        const element = document.getElementById("contact");
-        if (element) element.scrollIntoView({ behavior: "smooth" });
-      }, 300);
+  const hash = window.location.hash;
+  if (!hash) return;
+
+  // Delay ensures home sections are rendered after navigation
+  setTimeout(() => {
+    const element = document.querySelector(hash);
+    if (element) {
+      const yOffset = -80; // navbar height offset
+      const yPosition =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({
+        top: yPosition,
+        behavior: "smooth",
+      });
     }
-  }, []);
+  }, 400);
+}, []);
+
 
     return (
       <div className="pt-20 min-h-screen  bg-gradient-to-br from-[#0A2342] via-[#0E1E3F] to-black text-white antialiased relative overflow-hidden">
@@ -285,7 +470,7 @@ import Retail from "./pages/Retail";
   {
             icon: <Layers className="w-10 h-10 text-green-400" />,
             title: "Digitization",
-  	  subtitle: "100%",
+      subtitle: "100%",
             highlight: "Migrated Projects",
 
             desc: "Transforming legacy processes into digital-first experiences for agility and innovation.",
@@ -314,7 +499,7 @@ import Retail from "./pages/Retail";
 
    {
             icon: <Cpu className="w-10 h-10 text-pink-400" />,
-  	  subtitle: "90%",
+      subtitle: "90%",
             highlight: "Industry Coverage",
 
             title: "Engineering Services",
@@ -451,7 +636,22 @@ import Retail from "./pages/Retail";
       title: "Automotive Safety",
       desc: "Enhanced driver-assist with real-time vision AI for accident prevention.",
       link: "/smart/automotive"
-    }
+    },
+    {
+          title: "Smart Manufacturing",
+          desc: "AI quality inspection, predictive maintenance, and digital twins for smart factories.",
+          link: "/smart/manufacturing"
+        },
+        {
+          title: "AI in Healthcare",
+          desc: "AI diagnostics, remote monitoring and predictive alerts improving patient outcomes.",
+          link: "/smart/healthcare"
+        },
+        {
+          title: "Smart Retail & E-Commerce",
+          desc: "Demand forecasting, personalization and intelligent automated retail experiences.",
+          link: "/smart/retail"
+        }
   ].map((c) => (
     <motion.div
       key={c.title}
@@ -513,57 +713,254 @@ import Retail from "./pages/Retail";
 
       {/* Cards */}
       <div className="grid gap-8 md:grid-cols-3">
-        {[
-          {
-            title: "AI & Data Experts",
-            desc: "Skilled AI engineers, data scientists, and ML specialists to drive automation and intelligence.",
-          },
-          {
-            title: "Engineering Staffing",
-            desc: "Hire top engineering talent — software, hardware, systems, and product engineers tailored to your projects.",
-          },
-          {
-            title: "Digital Transformation Staffing",
-            desc: "Experts in cloud, IoT, RPA, cybersecurity, and enterprise digitization to accelerate your growth.",
-          },
-          {
-            title: "Custom Teams",
-            desc: "Build dedicated teams aligned with your goals — from small agile squads to enterprise programs.",
-          },
-          {
-            title: "Staffing Models",
-            desc: "Flexible engagement models — contract, contract-to-hire, permanent staffing, and on-demand consultants.",
-          },
-          {
-            title: "On-Demand Support",
-            desc: "Scale your workforce instantly with rapid access to pre-vetted talent for short or long-term needs.",
-          },
-        ].map((item, index) => (
-          <motion.div
-            key={index}
-            whileHover={{
-              scale: 1.04,
-              boxShadow: "0 0 25px rgba(0, 180, 255, 0.5)",
-            }}
-            className="relative overflow-hidden rounded-lg border border-blue-600/50 bg-gradient-to-b from-[#0a1a3a] via-[#010818] to-[#0a1a3a] p-8 transition-all duration-300 shadow-[inset_0_0_25px_rgba(0,0,0,0.7)]"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0a0a0a]/40 to-transparent pointer-events-none"></div>
-            <div className="flex flex-col justify-between h-full">
-              <h3 className="text-lg font-semibold text-blue-400 mb-4">
-                {item.title}
-              </h3>
-              <p className="text-gray-400 text-base leading-relaxed mb-6">
-                {item.desc}
-              </p>
-              <button className="w-full py-2 text-blue-200 font-semibold border border-blue-500 rounded-md bg-gradient-to-b from-[#03204e] via-[#000008] to-[#03204e] hover:shadow-[0_0_20px_rgba(0,180,255,0.4)] transition">
-                Know More
-              </button>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+        
+  {[
+  "AI & Data Experts",
+  "Engineering Staffing",
+  "Digital Transformation Staffing",
+  "Custom Dedicated Teams",
+  "Flexible Staffing Models",
+  "On-Demand Support",
+].map((title, index) => (
+  <motion.div
+    key={index}
+    whileHover={{
+      scale: 1.04,
+      boxShadow: "0 0 25px rgba(0,180,255,0.5)",
+    }}
+    className="relative overflow-hidden rounded-lg border border-blue-600/50 bg-gradient-to-b from-[#0a1a3a] via-[#010818] to-[#0a1a3a] p-8 transition-all duration-300 shadow-[inset_0_0_25px_rgba(0,0,0,0.7)]"
+  >
+    <h3 className="text-lg font-semibold text-blue-400 mb-3">{title}</h3>
+    <p className="text-gray-300 text-sm leading-relaxed mb-6">
+      {staffingDetails[title].overview}
+    </p>
+
+    <button
+      onClick={() => {
+        setSelectedStaffing(staffingDetails[title]);
+        setStaffingModalOpen(true);
+      }}
+      className="w-full py-2 text-blue-200 font-semibold border border-blue-500 rounded-md bg-gradient-to-b from-[#03204e] via-[#000008] to-[#03204e] hover:shadow-[0_0_20px_rgba(0,180,255,0.4)] transition"
+    >
+      Know More
+    </button>
+  </motion.div>
+))}
+
+</div>
+
+     
     </div>
   </section>
+  {/* ================================
+     STAFFING — LEARN MORE MODAL
+   ================================ */}
+{staffingModalOpen && selectedStaffing && (
+  <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-6">
+    <div className="bg-[#0d1b2a] border border-blue-500/40 rounded-2xl p-8 max-w-lg w-full shadow-2xl relative">
+
+      {/* Close Button */}
+      <button
+        className="absolute top-3 right-3 text-gray-400 hover:text-white text-xl"
+        onClick={() => setStaffingModalOpen(false)}
+      >
+        ✕
+      </button>
+
+      <h2 className="text-2xl font-semibold text-blue-400 mb-4">
+        {selectedStaffing.title}
+      </h2>
+
+      <p className="text-gray-300 mb-4">{selectedStaffing.overview}</p>
+
+      <h3 className="text-lg font-semibold text-blue-300 mb-2">Capabilities:</h3>
+      <ul className="list-disc list-inside text-gray-400 text-sm space-y-1 mb-4">
+        {selectedStaffing.capabilities.map((cap, i) => (
+          <li key={i}>{cap}</li>
+        ))}
+      </ul>
+
+      <h3 className="text-lg font-semibold text-blue-300 mb-2">Example:</h3>
+      <p className="text-gray-400 text-sm italic mb-6">{selectedStaffing.example}</p>
+
+      {/* Talent Request Button */}
+      <button
+        onClick={() => {
+          setStaffingModalOpen(false);     // close Learn More modal
+          setTalentFormOpen(true);         // open Talent request modal
+        }}
+        className="
+          w-full py-2
+          text-blue-200 font-semibold 
+          border border-blue-500 
+          rounded-md 
+          bg-gradient-to-b from-[#03204e] via-[#000008] to-[#03204e] 
+          shadow-[inset_0_0_10px_rgba(0,115,255,0.25)]
+          hover:shadow-[0_0_20px_rgba(0,180,255,0.4)]
+          hover:scale-105
+          transition-all duration-300
+        "
+      >
+        Request Talent
+      </button>
+    </div>
+  </div>
+)}
+{/* ================================
+     REQUEST TALENT FORM MODAL
+   ================================ */}
+{talentFormOpen && (
+  <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-6">
+
+    <motion.div
+  initial={{ opacity: 0, scale: 0.8 }}
+  animate={{ opacity: 1, scale: 1 }}
+  exit={{ opacity: 0, scale: 0.8 }}
+  transition={{ duration: 0.3 }}
+  className="
+    bg-[#0d1b2a]
+    border border-blue-500/40
+    rounded-2xl
+    p-8
+    max-w-lg
+    w-full
+    shadow-2xl
+    relative
+    max-h-[85vh]
+    overflow-y-auto
+    modal-scroll
+  "
+>
+
+      {/* Close Button */}
+      <button
+        className="
+          sticky top-0 right-0 ml-auto
+          text-gray-400 hover:text-white text-xl
+          bg-[#0d1b2a] p-1 z-50
+        "
+        onClick={() => setTalentFormOpen(false)}
+      >
+        ✕
+      </button>
+
+      <h2 className="text-xl font-semibold text-blue-400 mb-4">Request Talent</h2>
+
+      <p className="text-gray-300 text-sm mb-6 text-center">
+        Tell us what kind of talent you need. Our team will reach out within{" "}
+        <span className="text-blue-400 font-semibold">24–48 hours.</span>
+      </p>
+
+      {/* FORM */}
+      <div className="space-y-3">
+
+        {/* NAME */}
+        <div>
+          <label className="text-gray-300 text-sm">Your Name / Company</label>
+          <input
+            type="text"
+            value={talentForm.name}
+            onChange={(e) =>
+              setTalentForm({ ...talentForm, name: e.target.value })
+            }
+            className="w-full p-2 rounded-md bg-[#0b1a2a] border border-blue-500/40 text-gray-200"
+          />
+        </div>
+
+        {/* EMAIL */}
+        <div>
+          <label className="text-gray-300 text-sm">Email Address</label>
+          <input
+            type="email"
+            value={talentForm.email}
+            onChange={(e) =>
+              setTalentForm({ ...talentForm, email: e.target.value })
+            }
+            className="w-full p-2 rounded-md bg-[#0b1a2a] border border-blue-500/40 text-gray-200"
+          />
+        </div>
+
+        {/* ROLES */}
+        <div>
+          <label className="text-gray-300 text-sm">Role(s) Needed</label>
+          <input
+            type="text"
+            value={talentForm.roles}
+            onChange={(e) =>
+              setTalentForm({ ...talentForm, roles: e.target.value })
+            }
+            className="w-full p-2 rounded-md bg-[#0b1a2a] border border-blue-500/40 text-gray-200"
+          />
+        </div>
+
+        {/* EXPERIENCE */}
+        <div>
+          <label className="text-gray-300 text-sm">Experience Level</label>
+          <select
+            value={talentForm.experience}
+            onChange={(e) =>
+              setTalentForm({ ...talentForm, experience: e.target.value })
+            }
+            className="w-full p-2 rounded-md bg-[#0b1a2a] border border-blue-500/40 text-gray-200"
+          >
+            <option value="">Choose...</option>
+            <option>Junior</option>
+            <option>Mid Level</option>
+            <option>Senior</option>
+            <option>Lead / Architect</option>
+            <option>Dedicated Team</option>
+          </select>
+        </div>
+
+        {/* PROJECT BRIEF */}
+        <div>
+          <label className="text-gray-300 text-sm">Project Brief</label>
+          <textarea
+            rows="3"
+            value={talentForm.brief}
+            onChange={(e) =>
+              setTalentForm({ ...talentForm, brief: e.target.value })
+            }
+            className="w-full p-2 rounded-md bg-[#0b1a2a] border border-blue-500/40 text-gray-200"
+          ></textarea>
+        </div>
+
+        {/* SUBMIT BUTTON */}
+        <button
+          onClick={submitTalentForm}
+          className="w-full py-2 mt-4 text-blue-200 font-semibold border border-blue-500 rounded-md bg-gradient-to-b from-[#03204e] via-[#000008] to-[#03204e] hover:scale-105 transition"
+        >
+          Submit Request
+        </button>
+      </div>
+    </motion.div>
+  </div>
+)}
+
+{successOpen && (
+  <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+    <motion.div
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      className="bg-[#0d1b2a] border border-green-500/40 p-8 rounded-2xl text-center"
+    >
+      <h3 className="text-green-400 text-xl font-semibold mb-3">
+        Request Submitted!
+      </h3>
+      <p className="text-gray-300 text-sm mb-4">
+        Our team will contact you shortly with matching talent profiles.
+      </p>
+
+      <button
+        onClick={() => setSuccessOpen(false)}
+        className="px-6 py-2 border border-green-500 text-green-300 rounded-md hover:bg-green-900/20 transition"
+      >
+        Close
+      </button>
+    </motion.div>
+  </div>
+)}
+
   {/* iLearn SECTION */}
   <section
     id="ilearn"
@@ -600,19 +997,21 @@ import Retail from "./pages/Retail";
             <li>✔ Custom use-case driven training</li>
             <li>✔ Hands-on automation projects</li>
           </ul>
-         <button className="
-    mt-6 px-8 py-3 
-    bg-gradient-to-b from-[#052042] to-[#001229]
-    border border-[#0045ff80]
-    rounded-md
-    text-white font-semibold
-    shadow-[inset_0_0_10px_rgba(0,115,255,0.25)]
-    hover:shadow-[0_0_15px_rgba(0,115,255,0.4)]
-    hover:scale-105
-    transition-all duration-300
+         <a href="/ilearn/corporate-training">
+  <button className="
+      mt-6 px-8 py-3 
+      bg-gradient-to-b from-[#052042] to-[#001229]
+      border border-[#0045ff80]
+      rounded-md
+      text-white font-semibold
+      shadow-[inset_0_0_10px_rgba(0,115,255,0.25)]
+      hover:shadow-[0_0_15px_rgba(0,115,255,0.4)]
+      hover:scale-105
+      transition-all duration-300
   ">
     Learn More
   </button>
+</a>
 
 
 
@@ -633,6 +1032,7 @@ import Retail from "./pages/Retail";
             <li>✔ Real-world project mentorship</li>
             <li>✔ Certification & career guidance</li>
           </ul>
+          <a href="/ilearn/experienced-professionals">
           <button className="
     mt-6 px-8 py-3 
     bg-gradient-to-b from-[#052042] to-[#001229]
@@ -646,7 +1046,7 @@ import Retail from "./pages/Retail";
   ">
     Learn More
   </button>
-
+</a>
 
         </div>
       </div>
@@ -751,6 +1151,10 @@ import Retail from "./pages/Retail";
 <Route path="/smart/manufacturing" element={<Manufacturing />} />
 <Route path="/smart/healthcare" element={<Healthcare />} />
 <Route path="/smart/retail" element={<Retail />} />
+<Route path="/ilearn/corporate-training" element={<CorporateTraining />} />
+<Route path="/ilearn/experienced-professionals" element={<ExperiencedProfessionals />} />
+
+
 
 
 
