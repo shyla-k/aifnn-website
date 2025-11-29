@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Brain, BarChart3, Cpu, CheckCircle } from "lucide-react";
 
+
 export default function CorporateTraining() {
   const [trainingPopupOpen, setTrainingPopupOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");

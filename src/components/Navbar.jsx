@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import iLearnLogo from "../assets/iLearnjustlogo.png";
 import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
 
-  // Detect current path or hash
   const currentPath = location.pathname + location.hash;
-
   const isActive = (link) => currentPath === link;
 
   const activeClasses = `
@@ -19,7 +16,7 @@ export default function Navbar() {
   `;
 
   const baseLinkClasses = `
-    px-2 py-1 mx-1
+    px-2 py-1
     transition-all duration-300
     hover:bg-gradient-to-b 
     hover:from-[#052042] 
@@ -28,15 +25,10 @@ export default function Navbar() {
     hover:text-cyan-400
   `;
 
-  // ⭐ Custom Smart Solutions scroll handler
+  // ⭐ Smart Solutions — instant jump without scroll
   const goToSmartSolutions = () => {
-    navigate("/");
     setMenuOpen(false);
-
-    setTimeout(() => {
-      const el = document.getElementById("Smart-Solutions");
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 200);
+    window.location.href = "/#Smart-Solutions";
   };
 
   return (
@@ -44,7 +36,7 @@ export default function Navbar() {
       bg-gradient-to-r from-[#031136] via-[#041b4d] to-[#072866]
       border-b border-blue-500/30 transition-all duration-500">
 
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
         {/* LOGO */}
         <div className="flex items-center gap-3">
@@ -55,68 +47,45 @@ export default function Navbar() {
         </div>
 
         {/* DESKTOP MENU */}
-        <div className="hidden md:flex items-center font-medium text-white">
+        <div className="hidden md:flex items-center font-medium text-white space-x-1">
 
-          <a
-            href="/"
-            className={`${baseLinkClasses} ${isActive("/") ? activeClasses : ""}`}
-          >
+          <a href="/" className={`${baseLinkClasses} ${isActive("/") ? activeClasses : ""}`}>
             Home
           </a>
 
-          <a
-            href="/#about"
-            className={`${baseLinkClasses} ${
-              isActive("/#about") ? activeClasses : ""
-            }`}
-          >
+          <a href="/#about" className={`${baseLinkClasses} ${isActive("/#about") ? activeClasses : ""}`}>
             About
           </a>
 
-          <a
-            href="/#services"
-            className={`${baseLinkClasses} ${
-              isActive("/#services") ? activeClasses : ""
-            }`}
-          >
+          <a href="/#services" className={`${baseLinkClasses} ${isActive("/#services") ? activeClasses : ""}`}>
             Services
           </a>
 
-          <a
-            href="/#industries"
-            className={`${baseLinkClasses} ${
-              isActive("/#industries") ? activeClasses : ""
-            }`}
-          >
+          <a href="/#industries" className={`${baseLinkClasses} ${isActive("/#industries") ? activeClasses : ""}`}>
             Industries
           </a>
 
-          <a
-            href="/#case-studies"
-            className={`${baseLinkClasses} ${
-              isActive("/#case-studies") ? activeClasses : ""
-            }`}
-          >
+          <a href="/#case-studies" className={`${baseLinkClasses} ${isActive("/#case-studies") ? activeClasses : ""}`}>
             Case Studies
           </a>
 
-          {/* ⭐ Smart Solutions button (cannot use href logic) */}
+          {/* ⭐ Smart Solutions updated */}
           <button
             onClick={goToSmartSolutions}
-            className={`${baseLinkClasses} ${
-              location.hash === "#Smart-Solutions" ? activeClasses : ""
-            }`}
+            className={`${baseLinkClasses} ${location.hash === "#Smart-Solutions" ? activeClasses : ""}`}
           >
             Smart Solutions
           </button>
 
-          <a
-            href="/#staffing"
-            className={`${baseLinkClasses} ${
-              isActive("/#staffing") ? activeClasses : ""
-            }`}
-          >
+          <a href="/#staffing" className={`${baseLinkClasses} ${isActive("/#staffing") ? activeClasses : ""}`}>
             Staffing
+          </a>
+
+          <a
+            href="/careers"
+            className={`${baseLinkClasses} ${isActive("/careers") ? activeClasses : ""}`}
+          >
+            Careers
           </a>
 
           <a
@@ -128,12 +97,7 @@ export default function Navbar() {
             <img src={iLearnLogo} className="h-5" />
           </a>
 
-          <a
-            href="/#contact"
-            className={`${baseLinkClasses} ${
-              isActive("/#contact") ? activeClasses : ""
-            }`}
-          >
+          <a href="/#contact" className={`${baseLinkClasses} ${isActive("/#contact") ? activeClasses : ""}`}>
             Contact
           </a>
         </div>
@@ -157,11 +121,20 @@ export default function Navbar() {
           <a href="/#industries" className="block px-2 py-2" onClick={() => setMenuOpen(false)}>Industries</a>
           <a href="/#case-studies" className="block px-2 py-2" onClick={() => setMenuOpen(false)}>Case Studies</a>
 
-          <button onClick={goToSmartSolutions} className="block w-full text-left px-2 py-2">
+          <a onClick={goToSmartSolutions} className="block px-2 py-2">
             Smart Solutions
-          </button>
+          </a>
 
           <a href="/#staffing" className="block px-2 py-2" onClick={() => setMenuOpen(false)}>Staffing</a>
+
+          <a
+            href="/careers"
+            className="block px-2 py-2"
+            onClick={() => setMenuOpen(false)}
+          >
+            Careers
+          </a>
+
           <a href="/#ilearn" className="block px-2 py-2" onClick={() => setMenuOpen(false)}>iLearn</a>
           <a href="/#contact" className="block px-2 py-2" onClick={() => setMenuOpen(false)}>Contact</a>
         </div>
