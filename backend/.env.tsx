@@ -10,7 +10,7 @@ SENDER_EMAIL=info@aifnn.com
 SMTP_HOST=smtp-relay.brevo.com
 SMTP_PORT=587
 SMTP_USER=9c7776001@smtp-brevo.com
-SMTP_PASS=xsmtpsib-224ee160742544d73d42f6cf2d67649874a9f6f48f618c1c762b91f454c3c62b-0wUR4yAkARcQMPwl
+SMTP_PASS=xsmtpsib-224ee160742544d73d42f6cf2d67649874a9f6f48f618c1c762b91f454c3c62b-vPrGLq3rYSdlnSfZ
 MONGODB_URI=mongodb+srv://aifnn:Aifnn2024%21@cluster0.9fjjxmr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 MONGODB_DB=aifnn_portal
 ADMIN_KEY=fbd8721b927b48f3a1fadf99371a345c
